@@ -23,10 +23,16 @@ AIRLINES 設定裡的 `card_selectors`。
 
 import os
 import re
+import sys
 import json
 import time
 import random
-from datetime import datetime, timedelta
+from datetime import datetime
+
+# Windows 排程的主控台是 cp950，印 emoji 會 UnicodeEncodeError 直接崩潰
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 # Playwright 為選用相依：環境若沒裝，全程以 fallback 運作（不會崩潰）
 try:
@@ -568,11 +574,13 @@ def run_all():
     unique = list(best.values())
 
     # 補欄位 + 含稅 + 到期時間
+    # 注意：不偽造數據——沒有真實折扣就標 0、沒有真實到期時間就不顯示倒數、
+    # 不生成假點擊數（信任是這個站的根本，假數據也會過不了聯盟行銷審核）
     now = datetime.now()
     for i, d in enumerate(unique):
         d["id"] = i + 1
         if d.get("discount_pct") is None:
-            d["discount_pct"] = random.randint(15, 60)
+            d["discount_pct"] = 0
         exp_raw = d.pop("_expires_raw", None)
         if exp_raw:
             try:
@@ -581,11 +589,7 @@ def run_all():
                 d["expires_at"] = edt.isoformat()
                 d["hours_remaining"] = max(1, int((edt - now).total_seconds() // 3600))
             except Exception:
-                exp_raw = None
-        if not exp_raw:
-            d.setdefault("hours_remaining", random.randint(12, 240))
-            d["expires_at"] = (now + timedelta(hours=d["hours_remaining"])).isoformat()
-        d.setdefault("clicks", random.randint(50, 2000))
+                pass  # 解析失敗就不給到期欄位，前端不顯示倒數
         tax_rate = 0.25 if d["is_lcc"] else 0.20
         d["price_with_tax"] = int(d["price"] * 2 * (1 + tax_rate))  # 來回含稅估算
 
@@ -604,8 +608,11 @@ def run_all():
         stats["by_airline"][d["airline"]] = stats["by_airline"].get(d["airline"], 0) + 1
     stats["special_count"] = sum(1 for d in unique if d.get("is_special"))
 
-    with open(OUT_PATH, "w", encoding="utf-8") as f:
+    # 原子寫入：先寫暫存檔再 replace，避免中途被中斷留下半截 JSON
+    tmp_path = OUT_PATH + ".tmp"
+    with open(tmp_path, "w", encoding="utf-8") as f:
         json.dump({"stats": stats, "deals": unique}, f, ensure_ascii=False, indent=2)
+    os.replace(tmp_path, OUT_PATH)
 
     live_cnt = sum(1 for d in unique if d.get("source") == "live")
     print("\n" + "=" * 56)
@@ -620,3 +627,4 @@ def run_all():
 
 if __name__ == "__main__":
     run_all()
+# 2026-06-10 更新：utf-8 輸出、原子寫入、移除偽造數據（clicks/隨機折扣/假倒數）

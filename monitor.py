@@ -11,10 +11,16 @@
   .last_cheapest.json← 上次快照（用來比對變動，勿手動刪）
 """
 import os
+import sys
 import csv
 import json
 import subprocess
 from datetime import datetime
+
+# Windows 排程的主控台是 cp950，印 emoji 會 UnicodeEncodeError 直接崩潰
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SNAP = os.path.join(HERE, ".last_cheapest.json")

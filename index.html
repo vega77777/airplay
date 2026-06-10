@@ -14,6 +14,9 @@
       document.head.appendChild(script);
   })();
 </script>
+<!-- Umami 免費流量/點擊分析：到 https://cloud.umami.is 註冊 → Add website →
+     把下面 data-website-id 換成你的 ID，並移除註解。之後就能看到每條航線的訂票/導購點擊數。 -->
+<!-- <script defer src="https://cloud.umami.is/script.js" data-website-id="你的-website-id"></script> -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -485,7 +488,6 @@ footer{position:relative;z-index:1;background:rgba(0,0,0,.3);border-top:1px soli
         <option value="latest">最新上架</option>
         <option value="discount">折扣最高</option>
         <option value="price_asc" selected>票價最低 🔥</option>
-        <option value="hot">最熱點擊</option>
       </select>
       <span class="results-count" id="resultsCount"></span>
       <span style="font-size:.72rem;color:var(--g600);margin-left:.5rem">📊 票價為市場行情參考，以官網為準</span>
@@ -741,6 +743,29 @@ let displayed = 0
 const PAGE_SIZE = 12
 let state = { region:'all', type:'all', airline:'', sort:'urgent' }
 
+// ─── 聯盟行銷設定（申請通過後把碼填進來即可，留空也能正常連結）────
+// Klook：affiliate.klook.com 審核通過後取得 aid
+// KKday：聯盟後台取得 cid
+const AFFILIATE = { klook_aid: '', kkday_cid: '' }
+
+// 機場代碼 → 行程搜尋用城市名（去掉機場後綴；未列者用 destination_name）
+const CITY_QUERY = {
+  NRT:'東京', HND:'東京', KIX:'大阪', ICN:'首爾', GMP:'首爾',
+  BKK:'曼谷', DMK:'曼谷', PVG:'上海', SHA:'上海', PEK:'北京', PKX:'北京',
+  CTS:'札幌', SWA:'潮汕', SGN:'胡志明市'
+}
+function crossSellLinks(d){
+  const city = CITY_QUERY[d.destination] || d.destination_name || ''
+  if(!city) return ''
+  const q = encodeURIComponent(city)
+  const klook = `https://www.klook.com/zh-TW/search/result/?query=${q}${AFFILIATE.klook_aid?`&aid=${AFFILIATE.klook_aid}`:''}`
+  const kkday = `https://www.kkday.com/zh-tw/product/productlist?keyword=${q}${AFFILIATE.kkday_cid?`&cid=${AFFILIATE.kkday_cid}`:''}`
+  return `<div style="display:flex;gap:8px;margin-top:.7rem">
+    <a href="${klook}" target="_blank" rel="noopener" data-track="klook" data-dest="${d.destination}" style="flex:1;text-align:center;padding:10px;font-size:.82rem;font-weight:700;color:#fff;background:rgba(255,92,40,.15);border:1px solid rgba(255,92,40,.4);border-radius:10px;text-decoration:none">🎡 ${city}行程・門票 Klook</a>
+    <a href="${kkday}" target="_blank" rel="noopener" data-track="kkday" data-dest="${d.destination}" style="flex:1;text-align:center;padding:10px;font-size:.82rem;font-weight:700;color:#fff;background:rgba(38,189,226,.12);border:1px solid rgba(38,189,226,.4);border-radius:10px;text-decoration:none">🎟 ${city}玩樂 KKday</a>
+  </div>`
+}
+
 // ─── Load JSON ───────────────────────────────────────────────
 async function loadDeals() {
   // 優先抓最新的 deals.json（透過 server.py 開啟時）；失敗才用內嵌備援資料（直接雙擊開啟時）
@@ -856,7 +881,6 @@ function applyFilters() {
   if(state.sort === 'urgent') filtered.sort((a,b) => (a.hours_remaining||9999)-(b.hours_remaining||9999))
   else if(state.sort === 'discount') filtered.sort((a,b) => (b.discount_pct||0)-(a.discount_pct||0))
   else if(state.sort === 'price_asc') filtered.sort((a,b) => a.price-b.price)
-  else if(state.sort === 'hot') filtered.sort((a,b) => (b.clicks||0)-(a.clicks||0))
   else filtered.sort((a,b) => new Date(b.scraped_at)-new Date(a.scraped_at))
 
   displayed = 0
@@ -895,12 +919,22 @@ function loadMore() {
   renderGrid(false)
 }
 
+// 真實資料輔助：查得時間 / 資料來源標籤
+function agoText(d){
+  if(!d.scraped_at) return ''
+  const h = Math.floor((Date.now() - new Date(d.scraped_at)) / 3600000)
+  return h < 1 ? '1 小時內查得' : h < 24 ? `${h} 小時前查得` : `${Math.floor(h/24)} 天前查得`
+}
+function sourceLabel(d){
+  return d.source === 'live' ? '✅ 即時票價' : '📊 行情參考價'
+}
+
 function makeCard(d) {
   const img = DEST_IMG[d.destination] || `https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&q=70`
   const flag = DEST_FLAGS[d.destination] || '🌍'
   const destName = d.destination_name || d.destination
-  const isUrgent = (d.hours_remaining||9999) < 24
-  const isNew = (d.hours_remaining||9999) > 160
+  const isUrgent = d.hours_remaining != null && d.hours_remaining < 24
+  const isNew = d.scraped_at && (Date.now() - new Date(d.scraped_at)) < 24*3600000
   const alTag = d.is_lcc ? '<span class="lcc-tag">廉航</span>' : '<span class="trad-tag">傳統航空</span>'
   const ribbon = isUrgent ? '<div class="ribbon">🔥 限時24H</div>' : ''
   const newBadge = isNew ? '<div class="new-badge">NEW</div>' : ''
@@ -930,9 +964,9 @@ function makeCard(d) {
         ${discBadge}
       </div>
       ${taxPrice ? `<div class="card-price-tax">${taxPrice}</div>` : ''}
-      <div class="card-cdown">⏰ 距截止 <span class="t" data-hours="${d.hours_remaining||0}" data-id="${d.id}">計算中</span></div>
+      ${d.hours_remaining != null ? `<div class="card-cdown">⏰ 距截止 <span class="t" data-hours="${d.hours_remaining}" data-id="${d.id}">計算中</span></div>` : `<div class="card-cdown">${sourceLabel(d)}</div>`}
       <div class="card-footer">
-        <div class="hot-cnt">🔥 ${(d.clicks||0).toLocaleString()} 人點擊</div>
+        <div class="hot-cnt">🕐 ${agoText(d)}</div>
         <button class="btn-go" onclick="openDealModal(${d.id})">🎫 查看此優惠</button>
       </div>
     </div>
@@ -979,18 +1013,18 @@ function renderHeroCard(d) {
     <div class="card-meta">
       <div class="meta-item">🌏 目的地<strong>${destName}</strong></div>
       <div class="meta-item">🎫 含稅估算<strong>$${(d.price_with_tax||0).toLocaleString()} TWD</strong></div>
-      <div class="meta-item">🔥 今日點擊<strong>${(d.clicks||0).toLocaleString()} 人</strong></div>
+      <div class="meta-item">🕐 查得時間<strong>${agoText(d)||'—'}</strong></div>
       <div class="meta-item">✈ 航空公司<strong>${d.airline}</strong></div>
     </div>
-    <div class="cdown-bar">
+    ${d.hours_remaining != null ? `<div class="cdown-bar">
       <span class="cdown-lbl">⏰ 距離促銷截止</span>
-      <span class="cdown-digits" id="heroCD" data-hours="${d.hours_remaining||0}">--:--:--</span>
-    </div>
+      <span class="cdown-digits" id="heroCD" data-hours="${d.hours_remaining}">--:--:--</span>
+    </div>` : ''}
     <div class="card-actions">
       <button class="btn-book" onclick="openDealModal(${d.id})">🎫 查看此優惠方案</button>
       <button class="btn-save" onclick="saveItem(this)">🔖 加入追蹤</button>
     </div>
-    <div class="hot-ind"><span class="hot-dot"></span>今日已有 <strong style="color:var(--orange);margin:0 4px">${(d.clicks||0).toLocaleString()}</strong> 人點擊此促銷</div>
+    <div class="hot-ind"><span class="hot-dot"></span>${sourceLabel(d)}　·　票價以航空公司官網顯示為準</div>
   `
 }
 
@@ -1027,7 +1061,7 @@ function switchAlTab(btn, cat) {
 
 // ─── Ticker ───────────────────────────────────────────────────
 function renderTicker() {
-  const top15 = [...allDeals].sort((a,b)=>(b.clicks||0)-(a.clicks||0)).slice(0,15)
+  const top15 = [...allDeals].sort((a,b)=>a.price-b.price).slice(0,15)
   const mkItem = d => `<div class="ticker-item">${AL_EMOJI[d.airline_code]||'✈'} ${d.airline} 台北→${d.destination_name||d.destination} <span class="tp">$${d.price.toLocaleString()}</span> 起</div><div class="ticker-sep">·</div>`
   const html = top15.map(mkItem).join('') + top15.map(mkItem).join('') // duplicate for seamless loop
   document.getElementById('tickerInner').innerHTML = html
@@ -1125,6 +1159,16 @@ function countClick(id){
   if(d) d.clicks=(d.clicks||0)+1
 }
 function trackClick(e,label,id){ countClick(id) } // 向後相容
+
+// ─── 真實點擊追蹤（Umami；未啟用時靜默略過）──────────────────────
+function trackOutbound(type, label){
+  if(window.umami && umami.track) umami.track('outbound', { type, label })
+}
+// 交叉導購連結（data-track 屬性）統一在這裡記點擊
+document.addEventListener('click', e=>{
+  const a = e.target.closest && e.target.closest('a[data-track]')
+  if(a) trackOutbound(a.dataset.track, a.dataset.dest||'')
+})
 function saveItem(btn){
   btn.textContent='✅ 已追蹤';btn.style.color='var(--green)';btn.style.borderColor='rgba(16,185,129,.4)'
   showToast('🔖','加入追蹤','票價截止前會提醒你')
@@ -1135,6 +1179,7 @@ function openDealModal(id){
   const d = allDeals.find(x=>x.id===id)
   if(!d) return
   countClick(id)
+  trackOutbound('view_deal', `${d.airline_code}-${d.destination}`)
   const destName = d.destination_name || d.destination
   const flag = DEST_FLAGS[d.destination] || '🌍'
   const img = DEST_IMG[d.destination] || ''
@@ -1159,10 +1204,11 @@ function openDealModal(id){
     </div>
     <div style="font-size:.82rem;color:var(--g400);margin-bottom:1.1rem">${tax}</div>
     <div style="background:rgba(255,255,255,.04);border-radius:12px;padding:.85rem 1rem;font-size:.82rem;color:var(--g400);line-height:1.8;margin-bottom:1.3rem">
-      🔥 今日 ${(d.clicks||0).toLocaleString()} 人查看　·　⏰ 約 ${d.hours_remaining||0} 小時後截止<br>
+      ${sourceLabel(d)}　·　🕐 ${agoText(d)||'查得時間不明'}${d.hours_remaining != null ? `　·　⏰ 約 ${d.hours_remaining} 小時後截止` : ''}<br>
       票價為參考，實際金額與艙位請以航空公司官網顯示為準。
     </div>
-    <a href="${d.booking_url}" target="_blank" rel="noopener" class="btn-go" style="display:block;text-align:center;padding:15px;font-size:1rem" onclick="countClick(${d.id})">🎫 前往官網訂票 ↗</a>
+    <a href="${d.booking_url}" target="_blank" rel="noopener" class="btn-go" style="display:block;text-align:center;padding:15px;font-size:1rem" onclick="trackOutbound('booking', '${d.airline_code}-${d.destination}')">🎫 前往官網訂票 ↗</a>
+    ${crossSellLinks(d)}
   `
   document.getElementById('dealModal').classList.add('open')
 }
