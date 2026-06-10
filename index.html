@@ -158,6 +158,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .region-tab:hover{color:var(--white);border-color:rgba(255,255,255,.2)}
 .region-tab.active{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.25);color:var(--white)}
 .region-tab .cnt{background:rgba(255,107,53,.25);color:var(--orange-l);padding:1px 7px;border-radius:100px;font-size:.7rem;font-weight:700}
+.region-tab.special-tab{border-color:rgba(255,107,53,.5);color:var(--orange-l);background:rgba(255,107,53,.08)}
+.region-tab.special-tab.active{background:linear-gradient(135deg,rgba(255,107,53,.3),rgba(255,140,66,.2));border-color:var(--orange);color:#fff}
+.sp-badge{position:absolute;top:.75rem;left:.75rem;background:linear-gradient(135deg,#ff6b35,#ff8c42);color:#fff;font-size:.72rem;font-weight:800;padding:4px 10px;border-radius:100px;box-shadow:0 4px 12px rgba(255,107,53,.4);z-index:2}
 
 /* ── Promo Grid ──────────────────────────── */
 .promo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.25rem}
@@ -452,6 +455,7 @@ footer{position:relative;z-index:1;background:rgba(0,0,0,.3);border-top:1px soli
     <!-- Region tabs -->
     <div class="region-tabs" id="regionTabs">
       <button class="region-tab active" data-region="all" onclick="setRegion(this,'all')">全部 <span class="cnt" id="cnt-all">--</span></button>
+      <button class="region-tab special-tab" data-region="special" onclick="setRegion(this,'special')">🎉 特殊活動 <span class="cnt" id="cnt-special">--</span></button>
       <button class="region-tab" data-region="northeast_asia" onclick="setRegion(this,'northeast_asia')">🇯🇵 東北亞 <span class="cnt" id="cnt-northeast_asia">--</span></button>
       <button class="region-tab" data-region="china" onclick="setRegion(this,'china')">🇨🇳 中國大陸 <span class="cnt" id="cnt-china">--</span></button>
       <button class="region-tab" data-region="southeast_asia" onclick="setRegion(this,'southeast_asia')">🌴 東南亞 <span class="cnt" id="cnt-southeast_asia">--</span></button>
@@ -784,6 +788,9 @@ function initPage(stats) {
     const el = document.getElementById('cnt-'+k)
     if(el) el.textContent = v
   })
+  const spCnt = document.getElementById('cnt-special')
+  if(spCnt) spCnt.textContent = (stats.special_count != null
+    ? stats.special_count : allDeals.filter(d => d.is_special).length)
 
   // Airline select
   const sel = document.getElementById('airlineSelect')
@@ -836,7 +843,8 @@ function applyFilters() {
   state.sort = document.getElementById('sortSelect').value
 
   filtered = allDeals.filter(d => {
-    const rOk = state.region === 'all' || d.region === state.region
+    const rOk = state.region === 'all' ||
+      (state.region === 'special' ? d.is_special : d.region === state.region)
     const tOk = state.type === 'all' ||
       (state.type === 'lcc' && d.is_lcc) ||
       (state.type === 'full' && !d.is_lcc)
@@ -896,6 +904,7 @@ function makeCard(d) {
   const alTag = d.is_lcc ? '<span class="lcc-tag">廉航</span>' : '<span class="trad-tag">傳統航空</span>'
   const ribbon = isUrgent ? '<div class="ribbon">🔥 限時24H</div>' : ''
   const newBadge = isNew ? '<div class="new-badge">NEW</div>' : ''
+  const spBadge = d.is_special && d.special_label ? `<div class="sp-badge">${d.special_label}</div>` : ''
   const alEmoji = AL_EMOJI[d.airline_code] || '✈'
   const discBadge = d.discount_pct ? `<span class="disc-badge" style="margin-left:auto">-${d.discount_pct}%</span>` : ''
   const bustBadge = d.price < 1500 ? '<span class="badge-bust">破盤</span>' : (d.price < 2500 ? '<span class="badge-deal">超值</span>' : '')
@@ -908,7 +917,7 @@ function makeCard(d) {
       <div class="ov"></div>
       <div class="dest-n">${destName} ${flag}</div>
       <div class="dest-c">${d.origin_name||'台北'} → ${destName}</div>
-      ${ribbon}${newBadge}
+      ${ribbon}${newBadge}${spBadge}
     </div>
     <div class="card-body">
       <div class="card-airline-row">
@@ -1133,6 +1142,8 @@ function openDealModal(id){
   const tag = d.is_lcc ? '廉航' : '傳統航空'
   const disc = d.discount_pct ? `<span style="margin-left:8px;font-size:.8rem;font-weight:800;color:var(--orange)">-${d.discount_pct}%</span>` : ''
   const tax = d.price_with_tax ? `含稅約 $${d.price_with_tax.toLocaleString()} TWD · 來回` : ''
+  const spList = (d.special_labels && d.special_labels.length ? d.special_labels : (d.special_label ? [d.special_label] : []))
+  const spRow = spList.length ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.9rem">${spList.map(s=>`<span style="font-size:.75rem;font-weight:800;color:#fff;background:linear-gradient(135deg,#ff6b35,#ff8c42);padding:4px 12px;border-radius:100px">${s}</span>`).join('')}</div>` : ''
   document.getElementById('dmTitle').textContent = `${destName} ${flag}`
   document.getElementById('dmBody').innerHTML = `
     <div style="border-radius:14px;overflow:hidden;height:140px;background:url('${img}') center/cover,linear-gradient(135deg,#1a3a6b,#0B1426);margin-bottom:1.1rem"></div>
@@ -1141,6 +1152,7 @@ function openDealModal(id){
       <span style="font-size:.72rem;padding:3px 12px;border-radius:100px;background:rgba(255,255,255,.08);color:var(--g400)">${tag}</span>
     </div>
     <div style="font-size:.9rem;color:var(--g400);margin-bottom:1rem">${d.origin_name||'台北'} (${d.origin||'TPE'}) → ${destName} (${d.destination})</div>
+    ${spRow}
     <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:.25rem">
       <span style="font-size:2.1rem;font-weight:900;color:var(--orange)">$${d.price.toLocaleString()}</span>
       <span style="color:var(--g400);font-size:.9rem">TWD 起</span>${disc}

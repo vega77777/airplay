@@ -65,6 +65,17 @@ DEST_REGION_MAP = {
     "洛杉磯": "americas", "舊金山": "americas", "紐約": "americas",
     "溫哥華": "americas", "多倫多": "americas",
     "雪梨": "oceania", "墨爾本": "oceania", "澳洲": "oceania",
+    # ── 更多目的地地區對應 ──
+    "鹿兒島": "northeast_asia", "廣島": "northeast_asia", "岡山": "northeast_asia",
+    "高松": "northeast_asia", "熊本": "northeast_asia", "小松": "northeast_asia",
+    "富山": "northeast_asia", "佐賀": "northeast_asia", "濟州": "northeast_asia",
+    "大邱": "northeast_asia",
+    "南京": "china", "天津": "china", "長沙": "china", "三亞": "china",
+    "海口": "china", "福州": "china", "寧波": "china", "大連": "china",
+    "瀋陽": "china", "哈爾濱": "china", "鄭州": "china", "桂林": "china", "潮汕": "china",
+    "暹粒": "southeast_asia", "金邊": "southeast_asia", "仰光": "southeast_asia",
+    "芽莊": "southeast_asia", "富國島": "southeast_asia", "蘇梅島": "southeast_asia",
+    "宿霧": "southeast_asia", "喀比": "southeast_asia",
 }
 
 IATA_NAMES = {
@@ -81,6 +92,15 @@ IATA_NAMES = {
     "LHR": "倫敦", "CDG": "巴黎", "AMS": "阿姆斯特丹", "FRA": "法蘭克福", "VIE": "維也納",
     "LAX": "洛杉磯", "SFO": "舊金山", "JFK": "紐約", "YVR": "溫哥華", "YYZ": "多倫多",
     "SYD": "雪梨", "MEL": "墨爾本",
+    # ── 更多目的地（API 回傳這些代碼時可顯示中文名）──
+    "KOJ": "鹿兒島", "HIJ": "廣島", "OKJ": "岡山", "TAK": "高松", "KMJ": "熊本",
+    "SDJ": "仙台", "KMQ": "小松", "TOY": "富山", "HSG": "佐賀",
+    "CJU": "濟州", "TAE": "大邱",
+    "NKG": "南京", "TSN": "天津", "KMG": "昆明", "TAO": "青島", "CSX": "長沙",
+    "SYX": "三亞", "HAK": "海口", "FOC": "福州", "NGB": "寧波", "DLC": "大連",
+    "SHE": "瀋陽", "HRB": "哈爾濱", "CGO": "鄭州", "KWL": "桂林", "SWA": "揭陽潮汕",
+    "REP": "暹粒", "PNH": "金邊", "RGN": "仰光", "CXR": "芽莊", "PQC": "富國島",
+    "USM": "蘇梅島", "CEB": "宿霧", "KBV": "喀比", "HKG": "香港", "MFM": "澳門",
 }
 
 # 名稱 → IATA（反查，用於從頁面文字辨識目的地）
@@ -226,9 +246,14 @@ CODE_TO_NAME.update({
     "VN": "越南航空", "VJ": "越捷航空", "CZ": "中國南方航空", "MU": "中國東方航空",
     "CA": "中國國際航空", "HX": "香港航空", "UO": "香港快運", "5J": "宿霧太平洋",
     "SL": "泰國獅航", "FD": "泰國亞航",
+    "MF": "廈門航空", "3U": "四川航空", "SC": "山東航空", "ZH": "深圳航空",
+    "HO": "吉祥航空", "9C": "春秋航空", "HU": "海南航空", "GS": "天津航空",
+    "7C": "濟州航空", "TW": "德威航空", "BX": "釜山航空", "LJ": "真航空",
+    "RS": "首爾航空", "ZE": "易斯達航空", "VZ": "越捷泰國", "DD": "皇雀航空",
 })
 LCC_CODES = {"IT", "MM", "TR", "AK", "D7", "3K", "JQ", "GK",
-             "VJ", "5J", "SL", "FD", "UO"}
+             "VJ", "5J", "SL", "FD", "UO",
+             "9C", "7C", "TW", "BX", "LJ", "RS", "ZE", "VZ", "DD"}
 
 
 def _build_baseline():
@@ -257,26 +282,24 @@ def _aviasales_link(iata, depart_date):
     return f"https://www.aviasales.com/search/{path}?marker={TP_MARKER}"
 
 
-def fetch_travelpayouts(token, limit=300):
-    """從 Travelpayouts Data API 取台北出發的真實最低票價（source=live）。
-    失敗或無資料時回傳 []，呼叫端會自動退回 fallback。"""
+def _tp_get(url, token):
+    """送出 Travelpayouts API 請求，回傳 payload dict；失敗回 None。"""
     import urllib.request
-
-    url = ("https://api.travelpayouts.com/v2/prices/latest"
-           "?currency=twd&origin=TPE&period_type=year&one_way=true"
-           f"&page=1&limit={limit}&show_to_affiliates=true&sorting=price&token={token}")
     try:
         req = urllib.request.Request(url, headers={"X-Access-Token": token})
         with urllib.request.urlopen(req, timeout=30) as r:
-            payload = json.load(r)
+            return json.load(r)
     except Exception as e:
         print(f"[TP] API 取得失敗：{e}")
-        return []
+        return None
 
-    if not payload.get("success"):
-        print(f"[TP] API success=false：{payload.get('error')}")
-        return []
 
+def _parse_tp_payload(payload):
+    """把 Travelpayouts 回傳資料轉成標準 deal 清單（source=live）。"""
+    if not payload or not payload.get("success"):
+        if payload is not None:
+            print(f"[TP] API success=false：{payload.get('error')}")
+        return []
     deals = []
     for it in payload.get("data") or []:
         iata = it.get("destination")
@@ -297,8 +320,38 @@ def fetch_travelpayouts(token, limit=300):
         if exp:
             d["_expires_raw"] = exp
         deals.append(d)
+    return deals
 
+
+def fetch_travelpayouts(token, limit=500):
+    """從 Travelpayouts Data API 取台北出發的真實最低票價（source=live）。
+    失敗或無資料時回傳 []，呼叫端會自動退回 fallback。"""
+    url = ("https://api.travelpayouts.com/v2/prices/latest"
+           "?currency=twd&origin=TPE&period_type=year&one_way=true"
+           f"&page=1&limit={limit}&show_to_affiliates=true&sorting=price&token={token}")
+    deals = _parse_tp_payload(_tp_get(url, token))
     print(f"[TP] 取得 {len(deals)} 筆真實票價")
+    return deals
+
+
+# 中國大陸主要城市（逐城市查 API 拿真實價，補強寫死的行情 fallback）
+CHINA_IATAS = ["PVG", "SHA", "PEK", "PKX", "CAN", "CTU", "SZX", "HGH",
+               "XMN", "CKG", "WUH", "NKG", "TSN", "KMG", "TAO", "CSX",
+               "SYX", "FOC", "DLC", "KWL"]
+
+
+def fetch_china_prices(token):
+    """逐一查詢大陸重點城市的真實最低票價（source=live）。
+    任一城市失敗只略過該城市，不影響其他城市與既有 fallback。"""
+    deals = []
+    for iata in CHINA_IATAS:
+        url = ("https://api.travelpayouts.com/v2/prices/latest"
+               f"?currency=twd&origin=TPE&destination={iata}&one_way=true"
+               "&period_type=year&page=1&limit=5&show_to_affiliates=true"
+               f"&sorting=price&token={token}")
+        deals += _parse_tp_payload(_tp_get(url, token))
+        time.sleep(0.2)
+    print(f"[TP] 大陸航線取得 {len(deals)} 筆真實票價")
     return deals
 
 
@@ -384,6 +437,67 @@ def build_fallback(cfg):
     ]
 
 
+# ── 特殊活動：破盤超低價 + 活動目的地 ─────────────────────────────
+# 活動只收「季節性、會週期重複」的事件（演唱會檔期變動太快、易過期，不收）；
+# 綁定城市 + 月日區間，只有活動「即將到來」時才亮燈，所以永不過期。
+EVENTS = [
+    ("NRT", "🎆 東京夏日花火季", (7, 1), (8, 31)),
+    ("HND", "🎆 東京夏日花火季", (7, 1), (8, 31)),
+    ("KIX", "🏮 京都祇園祭・大阪夏祭", (7, 1), (8, 15)),
+    ("FUK", "🎆 福岡夏日花火", (7, 1), (8, 31)),
+    ("OKA", "🏝️ 沖繩夏季海島季", (6, 15), (9, 15)),
+    ("CTS", "☃️ 札幌雪祭", (2, 1), (2, 15)),
+    ("ICN", "🍁 首爾賞楓季", (10, 15), (11, 15)),
+    ("GMP", "🍁 首爾賞楓季", (10, 15), (11, 15)),
+    ("NRT", "🌸 東京賞櫻季", (3, 20), (4, 15)),
+    ("KIX", "🌸 京阪賞櫻季", (3, 20), (4, 15)),
+    ("BKK", "💦 曼谷潑水節", (4, 12), (4, 16)),
+    ("NRT", "🎉 東京跨年倒數", (12, 28), (1, 2)),
+    ("ICN", "🎉 首爾跨年倒數", (12, 28), (1, 2)),
+    ("BKK", "🎉 曼谷跨年倒數", (12, 28), (1, 2)),
+    ("HKG", "🎆 香港跨年煙火", (12, 28), (1, 2)),
+]
+SPECIAL_HORIZON = 150  # 活動起始日在未來這麼多天內，就視為「即將到來」
+FLASH_DISCOUNT = 50    # 折扣 ≥ 此值視為破盤超低價
+
+
+def _event_label(iata, now):
+    """回傳該目的地『即將到來』的活動標籤；沒有就回 None。"""
+    best, best_days = None, None
+    for ic, label, (sm, sd), (em, ed) in EVENTS:
+        if ic != iata:
+            continue
+        for yr in (now.year, now.year + 1):
+            try:
+                start = datetime(yr, sm, sd)
+                end_year = yr if (em, ed) >= (sm, sd) else yr + 1
+                end = datetime(end_year, em, ed, 23, 59)
+            except ValueError:
+                continue
+            if end < now:
+                continue
+            days = (start - now).days
+            if days > SPECIAL_HORIZON:
+                continue
+            if best_days is None or days < best_days:
+                best, best_days = label, days
+    return best
+
+
+def tag_special(deals, now):
+    """為每筆 deal 標記 is_special / special_label（破盤超低價 + 活動目的地）。"""
+    for d in deals:
+        labels = []
+        ev = _event_label(d["destination"], now)
+        if ev:
+            labels.append(ev)
+        if (d.get("discount_pct") or 0) >= FLASH_DISCOUNT:
+            labels.append("🔥 破盤超低價")
+        d["is_special"] = bool(labels)
+        d["special_label"] = labels[0] if labels else ""
+        d["special_labels"] = labels
+
+
 def run_all():
     print("=" * 56)
     print("飛出台灣 爬蟲啟動 —", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
@@ -391,6 +505,8 @@ def run_all():
     # 真實票價優先：有 TP_TOKEN 就用 Travelpayouts API；沒有才走 Playwright
     token = os.environ.get("TP_TOKEN", "").strip()
     api_deals = fetch_travelpayouts(token) if token else []
+    if token:
+        api_deals += fetch_china_prices(token)
     if token and not api_deals:
         print("[TP] 無即時資料，全程退回行情 fallback")
     use_browser = HAS_PLAYWRIGHT and not token
@@ -473,6 +589,9 @@ def run_all():
         tax_rate = 0.25 if d["is_lcc"] else 0.20
         d["price_with_tax"] = int(d["price"] * 2 * (1 + tax_rate))  # 來回含稅估算
 
+    # 特殊活動標記（破盤超低價 + 即將到來的活動目的地）
+    tag_special(unique, now)
+
     # 排序：價格由低到高（呼應「全站最便宜」）
     unique.sort(key=lambda x: x["price"])
 
@@ -483,6 +602,7 @@ def run_all():
     for d in unique:
         stats["by_region"][d["region"]] = stats["by_region"].get(d["region"], 0) + 1
         stats["by_airline"][d["airline"]] = stats["by_airline"].get(d["airline"], 0) + 1
+    stats["special_count"] = sum(1 for d in unique if d.get("is_special"))
 
     with open(OUT_PATH, "w", encoding="utf-8") as f:
         json.dump({"stats": stats, "deals": unique}, f, ensure_ascii=False, indent=2)
