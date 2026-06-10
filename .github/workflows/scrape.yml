@@ -34,6 +34,8 @@ jobs:
           python -m playwright install --with-deps chromium
 
       - name: Run scraper + build report
+        env:
+          TP_TOKEN: ${{ secrets.TP_TOKEN }}
         run: python monitor.py
 
       - name: Commit updated data
