@@ -19,7 +19,7 @@
       "長榮航空": 11,
       "星宇航空": 9
     },
-    "last_updated": "2026-06-10T08:01:08.869432",
+    "last_updated": "2026-06-10T04:33:44.189903",
     "update_interval_minutes": 15,
     "data_note": "即時抓取者標記 source=live；其餘為市場行情參考(known_promo)。點擊後直達各航空官方訂票頁，請以官網顯示為準。"
   },
@@ -40,12 +40,12 @@
       "booking_url": "https://www.airasia.com/",
       "promo_page": "https://www.airasia.com/deals",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:06.353151",
+      "scraped_at": "2026-06-10T04:33:42.094852",
       "id": 60,
-      "hours_remaining": 235,
-      "clicks": 225,
+      "hours_remaining": 188,
+      "clicks": 1637,
       "price_with_tax": 2747,
-      "expires_at": "2026-06-20T03:01:08.869432"
+      "expires_at": "2026-06-18T00:33:44.189903"
     },
     {
       "airline": "亞洲航空",
@@ -63,12 +63,12 @@
       "booking_url": "https://www.airasia.com/",
       "promo_page": "https://www.airasia.com/deals",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:06.353117",
+      "scraped_at": "2026-06-10T04:33:42.094835",
       "id": 56,
-      "hours_remaining": 35,
-      "clicks": 1144,
+      "hours_remaining": 168,
+      "clicks": 1413,
       "price_with_tax": 2997,
-      "expires_at": "2026-06-11T19:01:08.869432"
+      "expires_at": "2026-06-17T04:33:44.189903"
     },
     {
       "airline": "台灣虎航",
@@ -86,12 +86,12 @@
       "booking_url": "https://booking.tigerairtw.com/",
       "promo_page": "https://www.tigerairtw.com/zh-tw/event",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:15.607699",
+      "scraped_at": "2026-06-10T04:32:44.371276",
       "id": 3,
-      "hours_remaining": 83,
-      "clicks": 913,
+      "hours_remaining": 215,
+      "clicks": 901,
       "price_with_tax": 3247,
-      "expires_at": "2026-06-13T19:01:08.869432"
+      "expires_at": "2026-06-19T03:33:44.189903"
     },
     {
       "airline": "亞洲航空",
@@ -109,12 +109,12 @@
       "booking_url": "https://www.airasia.com/",
       "promo_page": "https://www.airasia.com/deals",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:06.353094",
+      "scraped_at": "2026-06-10T04:33:42.094813",
       "id": 55,
-      "hours_remaining": 75,
-      "clicks": 1128,
+      "hours_remaining": 137,
+      "clicks": 1419,
       "price_with_tax": 3247,
-      "expires_at": "2026-06-13T11:01:08.869432"
+      "expires_at": "2026-06-15T21:33:44.189903"
     },
     {
       "airline": "亞洲航空",
@@ -132,12 +132,12 @@
       "booking_url": "https://www.airasia.com/",
       "promo_page": "https://www.airasia.com/deals",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:06.353143",
+      "scraped_at": "2026-06-10T04:33:42.094848",
       "id": 59,
-      "hours_remaining": 14,
-      "clicks": 1383,
+      "hours_remaining": 46,
+      "clicks": 1073,
       "price_with_tax": 3372,
-      "expires_at": "2026-06-10T22:01:08.869432"
+      "expires_at": "2026-06-12T02:33:44.189903"
     },
     {
       "airline": "亞洲航空",
@@ -155,12 +155,12 @@
       "booking_url": "https://www.airasia.com/",
       "promo_page": "https://www.airasia.com/deals",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:06.353135",
+      "scraped_at": "2026-06-10T04:33:42.094844",
       "id": 58,
-      "hours_remaining": 81,
-      "clicks": 1737,
+      "hours_remaining": 101,
+      "clicks": 1830,
       "price_with_tax": 3497,
-      "expires_at": "2026-06-13T17:01:08.869432"
+      "expires_at": "2026-06-14T09:33:44.189903"
     },
     {
       "airline": "台灣虎航",
@@ -178,12 +178,12 @@
       "booking_url": "https://booking.tigerairtw.com/",
       "promo_page": "https://www.tigerairtw.com/zh-tw/event",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:15.607664",
+      "scraped_at": "2026-06-10T04:32:44.371248",
       "id": 1,
-      "hours_remaining": 108,
-      "clicks": 518,
+      "hours_remaining": 23,
+      "clicks": 612,
       "price_with_tax": 3747,
-      "expires_at": "2026-06-14T20:01:08.869432"
+      "expires_at": "2026-06-11T03:33:44.189903"
     },
     {
       "airline": "台灣虎航",
@@ -201,12 +201,12 @@
       "booking_url": "https://booking.tigerairtw.com/",
       "promo_page": "https://www.tigerairtw.com/zh-tw/event",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:15.607725",
+      "scraped_at": "2026-06-10T04:32:44.371302",
       "id": 7,
-      "hours_remaining": 116,
-      "clicks": 725,
+      "hours_remaining": 72,
+      "clicks": 1772,
       "price_with_tax": 3747,
-      "expires_at": "2026-06-15T04:01:08.869432"
+      "expires_at": "2026-06-13T04:33:44.189903"
     },
     {
       "airline": "酷航",
@@ -224,12 +224,12 @@
       "booking_url": "https://www.flyscoot.com/en",
       "promo_page": "https://www.flyscoot.com/en/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:53.363272",
+      "scraped_at": "2026-06-10T04:33:27.455072",
       "id": 50,
-      "hours_remaining": 171,
-      "clicks": 552,
+      "hours_remaining": 69,
+      "clicks": 1021,
       "price_with_tax": 3747,
-      "expires_at": "2026-06-17T11:01:08.869432"
+      "expires_at": "2026-06-13T01:33:44.189903"
     },
     {
       "airline": "亞洲航空",
@@ -247,12 +247,12 @@
       "booking_url": "https://www.airasia.com/",
       "promo_page": "https://www.airasia.com/deals",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:06.353125",
+      "scraped_at": "2026-06-10T04:33:42.094840",
       "id": 57,
-      "hours_remaining": 174,
-      "clicks": 1851,
+      "hours_remaining": 208,
+      "clicks": 817,
       "price_with_tax": 3747,
-      "expires_at": "2026-06-17T14:01:08.869432"
+      "expires_at": "2026-06-18T20:33:44.189903"
     },
     {
       "airline": "亞洲航空",
@@ -270,12 +270,12 @@
       "booking_url": "https://www.airasia.com/",
       "promo_page": "https://www.airasia.com/deals",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:06.353159",
+      "scraped_at": "2026-06-10T04:33:42.094856",
       "id": 61,
-      "hours_remaining": 73,
-      "clicks": 1334,
+      "hours_remaining": 221,
+      "clicks": 372,
       "price_with_tax": 3747,
-      "expires_at": "2026-06-13T09:01:08.869432"
+      "expires_at": "2026-06-19T09:33:44.189903"
     },
     {
       "airline": "台灣虎航",
@@ -293,12 +293,12 @@
       "booking_url": "https://booking.tigerairtw.com/",
       "promo_page": "https://www.tigerairtw.com/zh-tw/event",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:15.607706",
+      "scraped_at": "2026-06-10T04:32:44.371292",
       "id": 4,
-      "hours_remaining": 95,
-      "clicks": 1658,
+      "hours_remaining": 37,
+      "clicks": 982,
       "price_with_tax": 3997,
-      "expires_at": "2026-06-14T07:01:08.869432"
+      "expires_at": "2026-06-11T17:33:44.189903"
     },
     {
       "airline": "酷航",
@@ -316,12 +316,12 @@
       "booking_url": "https://www.flyscoot.com/en",
       "promo_page": "https://www.flyscoot.com/en/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:53.363265",
+      "scraped_at": "2026-06-10T04:33:27.455067",
       "id": 49,
-      "hours_remaining": 172,
-      "clicks": 1273,
+      "hours_remaining": 38,
+      "clicks": 408,
       "price_with_tax": 3997,
-      "expires_at": "2026-06-17T12:01:08.869432"
+      "expires_at": "2026-06-11T18:33:44.189903"
     },
     {
       "airline": "捷星亞洲",
@@ -339,12 +339,12 @@
       "booking_url": "https://www.jetstar.com/tw/zh/home",
       "promo_page": "https://www.jetstar.com/tw/zh/deals",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:08.744365",
+      "scraped_at": "2026-06-10T04:33:44.082712",
       "id": 67,
-      "hours_remaining": 168,
-      "clicks": 306,
+      "hours_remaining": 117,
+      "clicks": 781,
       "price_with_tax": 3997,
-      "expires_at": "2026-06-17T08:01:08.869432"
+      "expires_at": "2026-06-15T01:33:44.189903"
     },
     {
       "airline": "台灣虎航",
@@ -362,12 +362,12 @@
       "booking_url": "https://booking.tigerairtw.com/",
       "promo_page": "https://www.tigerairtw.com/zh-tw/event",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:15.607719",
+      "scraped_at": "2026-06-10T04:32:44.371299",
       "id": 6,
-      "hours_remaining": 135,
-      "clicks": 313,
+      "hours_remaining": 79,
+      "clicks": 1727,
       "price_with_tax": 4247,
-      "expires_at": "2026-06-15T23:01:08.869432"
+      "expires_at": "2026-06-13T11:33:44.189903"
     },
     {
       "airline": "台灣虎航",
@@ -385,12 +385,12 @@
       "booking_url": "https://booking.tigerairtw.com/",
       "promo_page": "https://www.tigerairtw.com/zh-tw/event",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:15.607759",
+      "scraped_at": "2026-06-10T04:32:44.371314",
       "id": 10,
-      "hours_remaining": 61,
-      "clicks": 1431,
+      "hours_remaining": 87,
+      "clicks": 1461,
       "price_with_tax": 4247,
-      "expires_at": "2026-06-12T21:01:08.869432"
+      "expires_at": "2026-06-13T19:33:44.189903"
     },
     {
       "airline": "樂桃航空",
@@ -408,12 +408,12 @@
       "booking_url": "https://www.flypeach.com/tw",
       "promo_page": "https://www.flypeach.com/tw/lm/ai/airports/taoyuan",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:44.452840",
+      "scraped_at": "2026-06-10T04:33:19.127521",
       "id": 43,
-      "hours_remaining": 191,
-      "clicks": 1505,
+      "hours_remaining": 178,
+      "clicks": 324,
       "price_with_tax": 4247,
-      "expires_at": "2026-06-18T07:01:08.869432"
+      "expires_at": "2026-06-17T14:33:44.189903"
     },
     {
       "airline": "酷航",
@@ -431,12 +431,12 @@
       "booking_url": "https://www.flyscoot.com/en",
       "promo_page": "https://www.flyscoot.com/en/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:53.363242",
+      "scraped_at": "2026-06-10T04:33:27.455043",
       "id": 47,
-      "hours_remaining": 180,
-      "clicks": 1957,
+      "hours_remaining": 108,
+      "clicks": 728,
       "price_with_tax": 4247,
-      "expires_at": "2026-06-17T20:01:08.869432"
+      "expires_at": "2026-06-14T16:33:44.189903"
     },
     {
       "airline": "亞洲航空",
@@ -454,12 +454,12 @@
       "booking_url": "https://www.airasia.com/",
       "promo_page": "https://www.airasia.com/deals",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:06.353174",
+      "scraped_at": "2026-06-10T04:33:42.094864",
       "id": 63,
-      "hours_remaining": 62,
-      "clicks": 807,
+      "hours_remaining": 54,
+      "clicks": 1098,
       "price_with_tax": 4247,
-      "expires_at": "2026-06-12T22:01:08.869432"
+      "expires_at": "2026-06-12T10:33:44.189903"
     },
     {
       "airline": "捷星亞洲",
@@ -477,12 +477,12 @@
       "booking_url": "https://www.jetstar.com/tw/zh/home",
       "promo_page": "https://www.jetstar.com/tw/zh/deals",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:08.744361",
+      "scraped_at": "2026-06-10T04:33:44.082707",
       "id": 66,
-      "hours_remaining": 109,
-      "clicks": 643,
+      "hours_remaining": 89,
+      "clicks": 685,
       "price_with_tax": 4247,
-      "expires_at": "2026-06-14T21:01:08.869432"
+      "expires_at": "2026-06-13T21:33:44.189903"
     },
     {
       "airline": "台灣虎航",
@@ -500,12 +500,12 @@
       "booking_url": "https://booking.tigerairtw.com/",
       "promo_page": "https://www.tigerairtw.com/zh-tw/event",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:15.607689",
+      "scraped_at": "2026-06-10T04:32:44.371271",
       "id": 2,
-      "hours_remaining": 92,
-      "clicks": 1137,
+      "hours_remaining": 217,
+      "clicks": 234,
       "price_with_tax": 4497,
-      "expires_at": "2026-06-14T04:01:08.869432"
+      "expires_at": "2026-06-19T05:33:44.189903"
     },
     {
       "airline": "酷航",
@@ -523,12 +523,12 @@
       "booking_url": "https://www.flyscoot.com/en",
       "promo_page": "https://www.flyscoot.com/en/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:53.363302",
+      "scraped_at": "2026-06-10T04:33:27.455089",
       "id": 54,
-      "hours_remaining": 68,
-      "clicks": 1120,
+      "hours_remaining": 142,
+      "clicks": 760,
       "price_with_tax": 4497,
-      "expires_at": "2026-06-13T04:01:08.869432"
+      "expires_at": "2026-06-16T02:33:44.189903"
     },
     {
       "airline": "亞洲航空",
@@ -546,12 +546,12 @@
       "booking_url": "https://www.airasia.com/",
       "promo_page": "https://www.airasia.com/deals",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:06.353183",
+      "scraped_at": "2026-06-10T04:33:42.094868",
       "id": 64,
-      "hours_remaining": 129,
-      "clicks": 634,
+      "hours_remaining": 118,
+      "clicks": 229,
       "price_with_tax": 4497,
-      "expires_at": "2026-06-15T17:01:08.869432"
+      "expires_at": "2026-06-15T02:33:44.189903"
     },
     {
       "airline": "捷星亞洲",
@@ -569,12 +569,12 @@
       "booking_url": "https://www.jetstar.com/tw/zh/home",
       "promo_page": "https://www.jetstar.com/tw/zh/deals",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:08.744369",
+      "scraped_at": "2026-06-10T04:33:44.082716",
       "id": 68,
-      "hours_remaining": 132,
-      "clicks": 1901,
+      "hours_remaining": 122,
+      "clicks": 1362,
       "price_with_tax": 4497,
-      "expires_at": "2026-06-15T20:01:08.869432"
+      "expires_at": "2026-06-15T06:33:44.189903"
     },
     {
       "airline": "樂桃航空",
@@ -592,12 +592,12 @@
       "booking_url": "https://www.flypeach.com/tw",
       "promo_page": "https://www.flypeach.com/tw/lm/ai/airports/taoyuan",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:44.452837",
+      "scraped_at": "2026-06-10T04:33:19.127518",
       "id": 42,
-      "hours_remaining": 112,
-      "clicks": 1267,
+      "hours_remaining": 75,
+      "clicks": 378,
       "price_with_tax": 4747,
-      "expires_at": "2026-06-15T00:01:08.869432"
+      "expires_at": "2026-06-13T07:33:44.189903"
     },
     {
       "airline": "樂桃航空",
@@ -615,12 +615,12 @@
       "booking_url": "https://www.flypeach.com/tw",
       "promo_page": "https://www.flypeach.com/tw/lm/ai/airports/taoyuan",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:44.452851",
+      "scraped_at": "2026-06-10T04:33:19.127529",
       "id": 46,
-      "hours_remaining": 105,
-      "clicks": 502,
+      "hours_remaining": 116,
+      "clicks": 745,
       "price_with_tax": 4747,
-      "expires_at": "2026-06-14T17:01:08.869432"
+      "expires_at": "2026-06-15T00:33:44.189903"
     },
     {
       "airline": "酷航",
@@ -638,12 +638,12 @@
       "booking_url": "https://www.flyscoot.com/en",
       "promo_page": "https://www.flyscoot.com/en/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:53.363258",
+      "scraped_at": "2026-06-10T04:33:27.455063",
       "id": 48,
-      "hours_remaining": 171,
-      "clicks": 1123,
+      "hours_remaining": 197,
+      "clicks": 1794,
       "price_with_tax": 4747,
-      "expires_at": "2026-06-17T11:01:08.869432"
+      "expires_at": "2026-06-18T09:33:44.189903"
     },
     {
       "airline": "捷星亞洲",
@@ -661,12 +661,12 @@
       "booking_url": "https://www.jetstar.com/tw/zh/home",
       "promo_page": "https://www.jetstar.com/tw/zh/deals",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:08.744349",
+      "scraped_at": "2026-06-10T04:33:44.082686",
       "id": 65,
-      "hours_remaining": 188,
-      "clicks": 1462,
+      "hours_remaining": 89,
+      "clicks": 689,
       "price_with_tax": 4747,
-      "expires_at": "2026-06-18T04:01:08.869432"
+      "expires_at": "2026-06-13T21:33:44.189903"
     },
     {
       "airline": "台灣虎航",
@@ -684,12 +684,12 @@
       "booking_url": "https://booking.tigerairtw.com/",
       "promo_page": "https://www.tigerairtw.com/zh-tw/event",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:15.607734",
+      "scraped_at": "2026-06-10T04:32:44.371306",
       "id": 8,
-      "hours_remaining": 174,
-      "clicks": 1410,
+      "hours_remaining": 183,
+      "clicks": 1051,
       "price_with_tax": 4997,
-      "expires_at": "2026-06-17T14:01:08.869432"
+      "expires_at": "2026-06-17T19:33:44.189903"
     },
     {
       "airline": "樂桃航空",
@@ -707,12 +707,12 @@
       "booking_url": "https://www.flypeach.com/tw",
       "promo_page": "https://www.flypeach.com/tw/lm/ai/airports/taoyuan",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:44.452834",
+      "scraped_at": "2026-06-10T04:33:19.127514",
       "id": 41,
-      "hours_remaining": 179,
-      "clicks": 1938,
+      "hours_remaining": 31,
+      "clicks": 1978,
       "price_with_tax": 4997,
-      "expires_at": "2026-06-17T19:01:08.869432"
+      "expires_at": "2026-06-11T11:33:44.189903"
     },
     {
       "airline": "樂桃航空",
@@ -730,12 +730,12 @@
       "booking_url": "https://www.flypeach.com/tw",
       "promo_page": "https://www.flypeach.com/tw/lm/ai/airports/taoyuan",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:44.452848",
+      "scraped_at": "2026-06-10T04:33:19.127527",
       "id": 45,
-      "hours_remaining": 90,
-      "clicks": 1644,
+      "hours_remaining": 216,
+      "clicks": 435,
       "price_with_tax": 4997,
-      "expires_at": "2026-06-14T02:01:08.869432"
+      "expires_at": "2026-06-19T04:33:44.189903"
     },
     {
       "airline": "亞洲航空",
@@ -753,12 +753,12 @@
       "booking_url": "https://www.airasia.com/",
       "promo_page": "https://www.airasia.com/deals",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:06.353167",
+      "scraped_at": "2026-06-10T04:33:42.094860",
       "id": 62,
-      "hours_remaining": 209,
-      "clicks": 764,
+      "hours_remaining": 193,
+      "clicks": 1581,
       "price_with_tax": 4997,
-      "expires_at": "2026-06-19T01:01:08.869432"
+      "expires_at": "2026-06-18T05:33:44.189903"
     },
     {
       "airline": "樂桃航空",
@@ -776,12 +776,12 @@
       "booking_url": "https://www.flypeach.com/tw",
       "promo_page": "https://www.flypeach.com/tw/lm/ai/airports/taoyuan",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:44.452824",
+      "scraped_at": "2026-06-10T04:33:19.127494",
       "id": 40,
-      "hours_remaining": 19,
-      "clicks": 87,
+      "hours_remaining": 178,
+      "clicks": 1802,
       "price_with_tax": 5497,
-      "expires_at": "2026-06-11T03:01:08.869432"
+      "expires_at": "2026-06-17T14:33:44.189903"
     },
     {
       "airline": "酷航",
@@ -799,12 +799,12 @@
       "booking_url": "https://www.flyscoot.com/en",
       "promo_page": "https://www.flyscoot.com/en/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:53.363296",
+      "scraped_at": "2026-06-10T04:33:27.455085",
       "id": 53,
-      "hours_remaining": 205,
-      "clicks": 1864,
+      "hours_remaining": 59,
+      "clicks": 979,
       "price_with_tax": 5497,
-      "expires_at": "2026-06-18T21:01:08.869432"
+      "expires_at": "2026-06-12T15:33:44.189903"
     },
     {
       "airline": "台灣虎航",
@@ -822,12 +822,12 @@
       "booking_url": "https://booking.tigerairtw.com/",
       "promo_page": "https://www.tigerairtw.com/zh-tw/event",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:15.607712",
+      "scraped_at": "2026-06-10T04:32:44.371295",
       "id": 5,
-      "hours_remaining": 49,
-      "clicks": 1813,
+      "hours_remaining": 20,
+      "clicks": 1993,
       "price_with_tax": 5747,
-      "expires_at": "2026-06-12T09:01:08.869432"
+      "expires_at": "2026-06-11T00:33:44.189903"
     },
     {
       "airline": "台灣虎航",
@@ -845,12 +845,12 @@
       "booking_url": "https://booking.tigerairtw.com/",
       "promo_page": "https://www.tigerairtw.com/zh-tw/event",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:15.607750",
+      "scraped_at": "2026-06-10T04:32:44.371310",
       "id": 9,
-      "hours_remaining": 138,
-      "clicks": 1399,
+      "hours_remaining": 42,
+      "clicks": 965,
       "price_with_tax": 5747,
-      "expires_at": "2026-06-16T02:01:08.869432"
+      "expires_at": "2026-06-11T22:33:44.189903"
     },
     {
       "airline": "樂桃航空",
@@ -868,12 +868,12 @@
       "booking_url": "https://www.flypeach.com/tw",
       "promo_page": "https://www.flypeach.com/tw/lm/ai/airports/taoyuan",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:44.452842",
+      "scraped_at": "2026-06-10T04:33:19.127524",
       "id": 44,
-      "hours_remaining": 114,
-      "clicks": 980,
+      "hours_remaining": 191,
+      "clicks": 734,
       "price_with_tax": 6247,
-      "expires_at": "2026-06-15T02:01:08.869432"
+      "expires_at": "2026-06-18T03:33:44.189903"
     },
     {
       "airline": "台灣虎航",
@@ -891,12 +891,12 @@
       "booking_url": "https://booking.tigerairtw.com/",
       "promo_page": "https://booking.tigerairtw.com/",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:08.744433",
+      "scraped_at": "2026-06-10T04:33:44.082791",
       "id": 76,
-      "hours_remaining": 178,
-      "clicks": 1013,
+      "hours_remaining": 170,
+      "clicks": 1361,
       "price_with_tax": 6997,
-      "expires_at": "2026-06-17T18:01:08.869432"
+      "expires_at": "2026-06-17T06:33:44.189903"
     },
     {
       "airline": "台灣虎航",
@@ -914,12 +914,12 @@
       "booking_url": "https://booking.tigerairtw.com/",
       "promo_page": "https://booking.tigerairtw.com/",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:08.744410",
+      "scraped_at": "2026-06-10T04:33:44.082758",
       "id": 72,
-      "hours_remaining": 235,
-      "clicks": 688,
+      "hours_remaining": 36,
+      "clicks": 1842,
       "price_with_tax": 7497,
-      "expires_at": "2026-06-20T03:01:08.869432"
+      "expires_at": "2026-06-11T16:33:44.189903"
     },
     {
       "airline": "中華航空",
@@ -937,12 +937,12 @@
       "booking_url": "https://www.china-airlines.com/tw/zh",
       "promo_page": "https://www.china-airlines.com/tw/zh",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:08.744430",
+      "scraped_at": "2026-06-10T04:33:44.082788",
       "id": 75,
-      "hours_remaining": 147,
-      "clicks": 1968,
+      "hours_remaining": 100,
+      "clicks": 1132,
       "price_with_tax": 10800,
-      "expires_at": "2026-06-16T11:01:08.869432"
+      "expires_at": "2026-06-14T08:33:44.189903"
     },
     {
       "airline": "中華航空",
@@ -960,12 +960,12 @@
       "booking_url": "https://www.china-airlines.com/tw/zh",
       "promo_page": "https://www.china-airlines.com/tw/zh",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:08.744402",
+      "scraped_at": "2026-06-10T04:33:44.082749",
       "id": 28,
-      "hours_remaining": 33,
-      "clicks": 1596,
+      "hours_remaining": 25,
+      "clicks": 1509,
       "price_with_tax": 11520,
-      "expires_at": "2026-06-11T17:01:08.869432"
+      "expires_at": "2026-06-11T05:33:44.189903"
     },
     {
       "airline": "中華航空",
@@ -983,12 +983,12 @@
       "booking_url": "https://www.china-airlines.com/tw/zh",
       "promo_page": "https://www.china-airlines.com/tw/zh",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:08.744424",
+      "scraped_at": "2026-06-10T04:33:44.082767",
       "id": 30,
-      "hours_remaining": 183,
-      "clicks": 1799,
+      "hours_remaining": 221,
+      "clicks": 1470,
       "price_with_tax": 12480,
-      "expires_at": "2026-06-17T23:01:08.869432"
+      "expires_at": "2026-06-19T09:33:44.189903"
     },
     {
       "airline": "長榮航空",
@@ -1006,12 +1006,12 @@
       "booking_url": "https://www.evaair.com/zh-tw/index.html",
       "promo_page": "https://www.evaair.com/zh-tw/index.html",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:08.744407",
+      "scraped_at": "2026-06-10T04:33:44.082755",
       "id": 71,
-      "hours_remaining": 72,
-      "clicks": 613,
+      "hours_remaining": 211,
+      "clicks": 722,
       "price_with_tax": 12480,
-      "expires_at": "2026-06-13T08:01:08.869432"
+      "expires_at": "2026-06-18T23:33:44.189903"
     },
     {
       "airline": "長榮航空",
@@ -1029,12 +1029,12 @@
       "booking_url": "https://www.evaair.com/zh-tw/index.html",
       "promo_page": "https://www.evaair.com/zh-tw/index.html",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:08.744436",
+      "scraped_at": "2026-06-10T04:33:44.082794",
       "id": 77,
-      "hours_remaining": 146,
-      "clicks": 1038,
+      "hours_remaining": 88,
+      "clicks": 975,
       "price_with_tax": 12960,
-      "expires_at": "2026-06-16T10:01:08.869432"
+      "expires_at": "2026-06-13T20:33:44.189903"
     },
     {
       "airline": "長榮航空",
@@ -1052,12 +1052,12 @@
       "booking_url": "https://www.evaair.com/zh-tw/index.html",
       "promo_page": "https://www.evaair.com/zh-tw/index.html",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:08.744416",
+      "scraped_at": "2026-06-10T04:33:44.082764",
       "id": 73,
-      "hours_remaining": 178,
-      "clicks": 1745,
+      "hours_remaining": 53,
+      "clicks": 1371,
       "price_with_tax": 13200,
-      "expires_at": "2026-06-17T18:01:08.869432"
+      "expires_at": "2026-06-12T09:33:44.189903"
     },
     {
       "airline": "中華航空",
@@ -1075,12 +1075,12 @@
       "booking_url": "https://www.china-airlines.com/tw/zh",
       "promo_page": "https://www.china-airlines.com/tw/zh",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:08.744413",
+      "scraped_at": "2026-06-10T04:33:44.082761",
       "id": 29,
-      "hours_remaining": 86,
-      "clicks": 208,
+      "hours_remaining": 101,
+      "clicks": 1118,
       "price_with_tax": 13920,
-      "expires_at": "2026-06-13T22:01:08.869432"
+      "expires_at": "2026-06-14T09:33:44.189903"
     },
     {
       "airline": "中華航空",
@@ -1098,12 +1098,12 @@
       "booking_url": "https://www.china-airlines.com/tw/zh",
       "promo_page": "https://www.china-airlines.com/tw/zh",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:08.744427",
+      "scraped_at": "2026-06-10T04:33:44.082770",
       "id": 74,
-      "hours_remaining": 109,
-      "clicks": 336,
+      "hours_remaining": 177,
+      "clicks": 623,
       "price_with_tax": 14880,
-      "expires_at": "2026-06-14T21:01:08.869432"
+      "expires_at": "2026-06-17T13:33:44.189903"
     },
     {
       "airline": "長榮航空",
@@ -1121,12 +1121,12 @@
       "booking_url": "https://www.evaair.com/zh-tw/index.html",
       "promo_page": "https://www.evaair.com/zh-tw/promotions/",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:24.178143",
+      "scraped_at": "2026-06-10T04:32:53.220817",
       "id": 17,
-      "hours_remaining": 143,
-      "clicks": 1701,
+      "hours_remaining": 187,
+      "clicks": 546,
       "price_with_tax": 17280,
-      "expires_at": "2026-06-16T07:01:08.869432"
+      "expires_at": "2026-06-17T23:33:44.189903"
     },
     {
       "airline": "中華航空",
@@ -1144,12 +1144,12 @@
       "booking_url": "https://www.china-airlines.com/tw/zh",
       "promo_page": "https://www.china-airlines.com/tw/zh/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:33.143613",
+      "scraped_at": "2026-06-10T04:33:01.195191",
       "id": 25,
-      "hours_remaining": 62,
-      "clicks": 73,
+      "hours_remaining": 38,
+      "clicks": 1941,
       "price_with_tax": 18720,
-      "expires_at": "2026-06-12T22:01:08.869432"
+      "expires_at": "2026-06-11T18:33:44.189903"
     },
     {
       "airline": "酷航",
@@ -1167,12 +1167,12 @@
       "booking_url": "https://www.flyscoot.com/en",
       "promo_page": "https://www.flyscoot.com/en/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:53.363280",
+      "scraped_at": "2026-06-10T04:33:27.455076",
       "id": 51,
-      "hours_remaining": 140,
-      "clicks": 1812,
+      "hours_remaining": 73,
+      "clicks": 92,
       "price_with_tax": 19997,
-      "expires_at": "2026-06-16T04:01:08.869432"
+      "expires_at": "2026-06-13T05:33:44.189903"
     },
     {
       "airline": "中華航空",
@@ -1190,12 +1190,12 @@
       "booking_url": "https://www.china-airlines.com/tw/zh",
       "promo_page": "https://www.china-airlines.com/tw/zh/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:33.143610",
+      "scraped_at": "2026-06-10T04:33:01.195188",
       "id": 24,
-      "hours_remaining": 14,
-      "clicks": 1617,
+      "hours_remaining": 168,
+      "clicks": 1751,
       "price_with_tax": 20400,
-      "expires_at": "2026-06-10T22:01:08.869432"
+      "expires_at": "2026-06-17T04:33:44.189903"
     },
     {
       "airline": "星宇航空",
@@ -1213,12 +1213,12 @@
       "booking_url": "https://www.starlux-airlines.com/zh-TW",
       "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:42.035277",
+      "scraped_at": "2026-06-10T04:33:17.308866",
       "id": 37,
-      "hours_remaining": 22,
-      "clicks": 1546,
+      "hours_remaining": 47,
+      "clicks": 886,
       "price_with_tax": 20400,
-      "expires_at": "2026-06-11T06:01:08.869432"
+      "expires_at": "2026-06-12T03:33:44.189903"
     },
     {
       "airline": "酷航",
@@ -1236,12 +1236,12 @@
       "booking_url": "https://www.flyscoot.com/en",
       "promo_page": "https://www.flyscoot.com/en/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:53.363289",
+      "scraped_at": "2026-06-10T04:33:27.455082",
       "id": 52,
-      "hours_remaining": 216,
-      "clicks": 1072,
+      "hours_remaining": 101,
+      "clicks": 1612,
       "price_with_tax": 21250,
-      "expires_at": "2026-06-19T08:01:08.869432"
+      "expires_at": "2026-06-14T09:33:44.189903"
     },
     {
       "airline": "長榮航空",
@@ -1259,12 +1259,12 @@
       "booking_url": "https://www.evaair.com/zh-tw/index.html",
       "promo_page": "https://www.evaair.com/zh-tw/promotions/",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:24.178138",
+      "scraped_at": "2026-06-10T04:32:53.220815",
       "id": 16,
-      "hours_remaining": 202,
-      "clicks": 482,
+      "hours_remaining": 121,
+      "clicks": 765,
       "price_with_tax": 21120,
-      "expires_at": "2026-06-18T18:01:08.869432"
+      "expires_at": "2026-06-15T05:33:44.189903"
     },
     {
       "airline": "捷星亞洲",
@@ -1282,12 +1282,12 @@
       "booking_url": "https://www.jetstar.com/tw/zh/home",
       "promo_page": "https://www.jetstar.com/tw/zh/deals",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:08.744373",
+      "scraped_at": "2026-06-10T04:33:44.082721",
       "id": 69,
-      "hours_remaining": 216,
-      "clicks": 1461,
+      "hours_remaining": 193,
+      "clicks": 1764,
       "price_with_tax": 22497,
-      "expires_at": "2026-06-19T08:01:08.869432"
+      "expires_at": "2026-06-18T05:33:44.189903"
     },
     {
       "airline": "中華航空",
@@ -1305,12 +1305,12 @@
       "booking_url": "https://www.china-airlines.com/tw/zh",
       "promo_page": "https://www.china-airlines.com/tw/zh/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:33.143608",
+      "scraped_at": "2026-06-10T04:33:01.195185",
       "id": 23,
-      "hours_remaining": 85,
-      "clicks": 209,
+      "hours_remaining": 32,
+      "clicks": 466,
       "price_with_tax": 22080,
-      "expires_at": "2026-06-13T21:01:08.869432"
+      "expires_at": "2026-06-11T12:33:44.189903"
     },
     {
       "airline": "星宇航空",
@@ -1328,12 +1328,12 @@
       "booking_url": "https://www.starlux-airlines.com/zh-TW",
       "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:42.035273",
+      "scraped_at": "2026-06-10T04:33:17.308863",
       "id": 36,
-      "hours_remaining": 179,
-      "clicks": 105,
+      "hours_remaining": 135,
+      "clicks": 958,
       "price_with_tax": 22080,
-      "expires_at": "2026-06-17T19:01:08.869432"
+      "expires_at": "2026-06-15T19:33:44.189903"
     },
     {
       "airline": "長榮航空",
@@ -1351,12 +1351,12 @@
       "booking_url": "https://www.evaair.com/zh-tw/index.html",
       "promo_page": "https://www.evaair.com/zh-tw/promotions/",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:24.178148",
+      "scraped_at": "2026-06-10T04:32:53.220835",
       "id": 18,
-      "hours_remaining": 232,
-      "clicks": 696,
+      "hours_remaining": 46,
+      "clicks": 88,
       "price_with_tax": 22800,
-      "expires_at": "2026-06-20T00:01:08.869432"
+      "expires_at": "2026-06-12T02:33:44.189903"
     },
     {
       "airline": "捷星亞洲",
@@ -1374,12 +1374,12 @@
       "booking_url": "https://www.jetstar.com/tw/zh/home",
       "promo_page": "https://www.jetstar.com/tw/zh/deals",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:01:08.744379",
+      "scraped_at": "2026-06-10T04:33:44.082726",
       "id": 70,
-      "hours_remaining": 127,
-      "clicks": 1837,
+      "hours_remaining": 78,
+      "clicks": 1245,
       "price_with_tax": 23750,
-      "expires_at": "2026-06-15T15:01:08.869432"
+      "expires_at": "2026-06-13T10:33:44.189903"
     },
     {
       "airline": "星宇航空",
@@ -1397,12 +1397,12 @@
       "booking_url": "https://www.starlux-airlines.com/zh-TW",
       "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:42.035268",
+      "scraped_at": "2026-06-10T04:33:17.308861",
       "id": 35,
-      "hours_remaining": 71,
-      "clicks": 1712,
+      "hours_remaining": 225,
+      "clicks": 94,
       "price_with_tax": 23520,
-      "expires_at": "2026-06-13T07:01:08.869432"
+      "expires_at": "2026-06-19T13:33:44.189903"
     },
     {
       "airline": "中華航空",
@@ -1420,12 +1420,12 @@
       "booking_url": "https://www.china-airlines.com/tw/zh",
       "promo_page": "https://www.china-airlines.com/tw/zh/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:33.143616",
+      "scraped_at": "2026-06-10T04:33:01.195194",
       "id": 26,
-      "hours_remaining": 95,
-      "clicks": 378,
+      "hours_remaining": 149,
+      "clicks": 240,
       "price_with_tax": 25200,
-      "expires_at": "2026-06-14T07:01:08.869432"
+      "expires_at": "2026-06-16T09:33:44.189903"
     },
     {
       "airline": "中華航空",
@@ -1443,12 +1443,12 @@
       "booking_url": "https://www.china-airlines.com/tw/zh",
       "promo_page": "https://www.china-airlines.com/tw/zh/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:33.143620",
+      "scraped_at": "2026-06-10T04:33:01.195198",
       "id": 27,
-      "hours_remaining": 97,
-      "clicks": 1019,
+      "hours_remaining": 105,
+      "clicks": 173,
       "price_with_tax": 26880,
-      "expires_at": "2026-06-14T09:01:08.869432"
+      "expires_at": "2026-06-14T13:33:44.189903"
     },
     {
       "airline": "星宇航空",
@@ -1466,12 +1466,12 @@
       "booking_url": "https://www.starlux-airlines.com/zh-TW",
       "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:42.035293",
+      "scraped_at": "2026-06-10T04:33:17.308873",
       "id": 39,
-      "hours_remaining": 122,
-      "clicks": 1170,
+      "hours_remaining": 104,
+      "clicks": 1918,
       "price_with_tax": 27600,
-      "expires_at": "2026-06-15T10:01:08.869432"
+      "expires_at": "2026-06-14T12:33:44.189903"
     },
     {
       "airline": "星宇航空",
@@ -1489,12 +1489,12 @@
       "booking_url": "https://www.starlux-airlines.com/zh-TW",
       "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:42.035287",
+      "scraped_at": "2026-06-10T04:33:17.308870",
       "id": 38,
-      "hours_remaining": 216,
-      "clicks": 535,
+      "hours_remaining": 67,
+      "clicks": 800,
       "price_with_tax": 28800,
-      "expires_at": "2026-06-19T08:01:08.869432"
+      "expires_at": "2026-06-12T23:33:44.189903"
     },
     {
       "airline": "長榮航空",
@@ -1512,12 +1512,12 @@
       "booking_url": "https://www.evaair.com/zh-tw/index.html",
       "promo_page": "https://www.evaair.com/zh-tw/promotions/",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:24.178107",
+      "scraped_at": "2026-06-10T04:32:53.220775",
       "id": 11,
-      "hours_remaining": 91,
-      "clicks": 1668,
+      "hours_remaining": 211,
+      "clicks": 360,
       "price_with_tax": 47520,
-      "expires_at": "2026-06-14T03:01:08.869432"
+      "expires_at": "2026-06-18T23:33:44.189903"
     },
     {
       "airline": "長榮航空",
@@ -1535,12 +1535,12 @@
       "booking_url": "https://www.evaair.com/zh-tw/index.html",
       "promo_page": "https://www.evaair.com/zh-tw/promotions/",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:24.178125",
+      "scraped_at": "2026-06-10T04:32:53.220802",
       "id": 13,
-      "hours_remaining": 62,
-      "clicks": 656,
+      "hours_remaining": 81,
+      "clicks": 1736,
       "price_with_tax": 49200,
-      "expires_at": "2026-06-12T22:01:08.869432"
+      "expires_at": "2026-06-13T13:33:44.189903"
     },
     {
       "airline": "長榮航空",
@@ -1558,12 +1558,12 @@
       "booking_url": "https://www.evaair.com/zh-tw/index.html",
       "promo_page": "https://www.evaair.com/zh-tw/promotions/",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:24.178120",
+      "scraped_at": "2026-06-10T04:32:53.220796",
       "id": 12,
-      "hours_remaining": 174,
-      "clicks": 1821,
+      "hours_remaining": 93,
+      "clicks": 387,
       "price_with_tax": 51600,
-      "expires_at": "2026-06-17T14:01:08.869432"
+      "expires_at": "2026-06-14T01:33:44.189903"
     },
     {
       "airline": "中華航空",
@@ -1581,12 +1581,12 @@
       "booking_url": "https://www.china-airlines.com/tw/zh",
       "promo_page": "https://www.china-airlines.com/tw/zh/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:33.143595",
+      "scraped_at": "2026-06-10T04:33:01.195172",
       "id": 20,
-      "hours_remaining": 70,
-      "clicks": 611,
+      "hours_remaining": 90,
+      "clicks": 1988,
       "price_with_tax": 52320,
-      "expires_at": "2026-06-13T06:01:08.869432"
+      "expires_at": "2026-06-13T22:33:44.189903"
     },
     {
       "airline": "長榮航空",
@@ -1604,12 +1604,12 @@
       "booking_url": "https://www.evaair.com/zh-tw/index.html",
       "promo_page": "https://www.evaair.com/zh-tw/promotions/",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:24.178129",
+      "scraped_at": "2026-06-10T04:32:53.220807",
       "id": 14,
-      "hours_remaining": 144,
-      "clicks": 371,
+      "hours_remaining": 138,
+      "clicks": 98,
       "price_with_tax": 52800,
-      "expires_at": "2026-06-16T08:01:08.869432"
+      "expires_at": "2026-06-15T22:33:44.189903"
     },
     {
       "airline": "中華航空",
@@ -1627,12 +1627,12 @@
       "booking_url": "https://www.china-airlines.com/tw/zh",
       "promo_page": "https://www.china-airlines.com/tw/zh/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:33.143584",
+      "scraped_at": "2026-06-10T04:33:01.195150",
       "id": 19,
-      "hours_remaining": 198,
-      "clicks": 1155,
+      "hours_remaining": 87,
+      "clicks": 964,
       "price_with_tax": 52800,
-      "expires_at": "2026-06-18T14:01:08.869432"
+      "expires_at": "2026-06-13T19:33:44.189903"
     },
     {
       "airline": "中華航空",
@@ -1650,12 +1650,12 @@
       "booking_url": "https://www.china-airlines.com/tw/zh",
       "promo_page": "https://www.china-airlines.com/tw/zh/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:33.143600",
+      "scraped_at": "2026-06-10T04:33:01.195177",
       "id": 21,
-      "hours_remaining": 119,
-      "clicks": 1210,
+      "hours_remaining": 219,
+      "clicks": 1128,
       "price_with_tax": 56400,
-      "expires_at": "2026-06-15T07:01:08.869432"
+      "expires_at": "2026-06-19T07:33:44.189903"
     },
     {
       "airline": "長榮航空",
@@ -1673,12 +1673,12 @@
       "booking_url": "https://www.evaair.com/zh-tw/index.html",
       "promo_page": "https://www.evaair.com/zh-tw/promotions/",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:24.178134",
+      "scraped_at": "2026-06-10T04:32:53.220812",
       "id": 15,
-      "hours_remaining": 209,
-      "clicks": 1780,
+      "hours_remaining": 33,
+      "clicks": 1204,
       "price_with_tax": 58800,
-      "expires_at": "2026-06-19T01:01:08.869432"
+      "expires_at": "2026-06-11T13:33:44.189903"
     },
     {
       "airline": "中華航空",
@@ -1696,12 +1696,12 @@
       "booking_url": "https://www.china-airlines.com/tw/zh",
       "promo_page": "https://www.china-airlines.com/tw/zh/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:33.143605",
+      "scraped_at": "2026-06-10T04:33:01.195183",
       "id": 22,
-      "hours_remaining": 56,
-      "clicks": 1658,
+      "hours_remaining": 150,
+      "clicks": 232,
       "price_with_tax": 60000,
-      "expires_at": "2026-06-12T16:01:08.869432"
+      "expires_at": "2026-06-16T10:33:44.189903"
     },
     {
       "airline": "星宇航空",
@@ -1719,12 +1719,12 @@
       "booking_url": "https://www.starlux-airlines.com/zh-TW",
       "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:42.035264",
+      "scraped_at": "2026-06-10T04:33:17.308858",
       "id": 34,
-      "hours_remaining": 24,
-      "clicks": 170,
+      "hours_remaining": 212,
+      "clicks": 1409,
       "price_with_tax": 66000,
-      "expires_at": "2026-06-11T08:01:08.869432"
+      "expires_at": "2026-06-19T00:33:44.189903"
     },
     {
       "airline": "星宇航空",
@@ -1742,12 +1742,12 @@
       "booking_url": "https://www.starlux-airlines.com/zh-TW",
       "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:42.035231",
+      "scraped_at": "2026-06-10T04:33:17.308827",
       "id": 31,
-      "hours_remaining": 21,
-      "clicks": 521,
+      "hours_remaining": 66,
+      "clicks": 643,
       "price_with_tax": 68400,
-      "expires_at": "2026-06-11T05:01:08.869432"
+      "expires_at": "2026-06-12T22:33:44.189903"
     },
     {
       "airline": "星宇航空",
@@ -1765,12 +1765,12 @@
       "booking_url": "https://www.starlux-airlines.com/zh-TW",
       "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:42.035250",
+      "scraped_at": "2026-06-10T04:33:17.308848",
       "id": 32,
-      "hours_remaining": 52,
-      "clicks": 1189,
+      "hours_remaining": 94,
+      "clicks": 1213,
       "price_with_tax": 70800,
-      "expires_at": "2026-06-12T12:01:08.869432"
+      "expires_at": "2026-06-14T02:33:44.189903"
     },
     {
       "airline": "星宇航空",
@@ -1788,12 +1788,12 @@
       "booking_url": "https://www.starlux-airlines.com/zh-TW",
       "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions",
       "source": "known_promo",
-      "scraped_at": "2026-06-10T08:00:42.035257",
+      "scraped_at": "2026-06-10T04:33:17.308853",
       "id": 33,
-      "hours_remaining": 54,
-      "clicks": 837,
+      "hours_remaining": 56,
+      "clicks": 373,
       "price_with_tax": 74400,
-      "expires_at": "2026-06-12T14:01:08.869432"
+      "expires_at": "2026-06-12T12:33:44.189903"
     }
   ]
 }
