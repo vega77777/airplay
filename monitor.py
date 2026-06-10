@@ -26,6 +26,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SNAP = os.path.join(HERE, ".last_cheapest.json")
 REPORT = os.path.join(HERE, "price_report.txt")
 HISTORY = os.path.join(HERE, "price_history.csv")
+ROUTE_HISTORY = os.path.join(HERE, "route_history.csv")
 
 
 def fmt(n):
@@ -138,6 +139,23 @@ def main():
     json.dump({"overall": cheapest["price"], "routes": cur_routes,
                "updated": now.isoformat()},
               open(SNAP, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+
+    # 每條航線的歷史價（給航線頁走勢圖用；欄位順序勿改：時間,航空,目的地,價格）
+    rh_new = not os.path.exists(ROUTE_HISTORY)
+    with open(ROUTE_HISTORY, "a", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        if rh_new:
+            w.writerow(["時間", "airline_code", "destination", "price"])
+        for d in deals:
+            w.writerow([ts, d["airline_code"], d["destination"], d["price"]])
+
+    # 重建 SEO 航線頁（失敗不影響監控主流程）
+    try:
+        import build_pages
+        n = build_pages.build()
+        print(f"[monitor] 航線頁已更新：{n} 頁")
+    except Exception as e:
+        print(f"[monitor] 航線頁建置失敗（不影響報告）：{e}")
 
     notify("飛出台灣 最低價",
            f"台北→{cheapest['destination_name']} {fmt(cheapest['price'])}  {change_line}")

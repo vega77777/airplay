@@ -42,7 +42,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add deals.json price_report.txt price_history.csv .last_cheapest.json
+          # 逐一加入存在的產物（航線頁建置失敗時不至於讓整個 workflow 掛掉）
+          for f in deals.json price_report.txt price_history.csv .last_cheapest.json \
+                   route_history.csv routes sitemap.xml robots.txt; do
+            if [ -e "$f" ]; then git add "$f"; fi
+          done
           if git diff --staged --quiet; then
             echo "資料無變動，略過 commit"
           else

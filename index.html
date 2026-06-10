@@ -351,6 +351,7 @@ footer{position:relative;z-index:1;background:rgba(0,0,0,.3);border-top:1px soli
   </a>
   <ul class="nav-links">
     <li><a href="#deals" class="active">特惠看板</a></li>
+    <li><a href="routes/">全部航線</a></li>
     <li><a href="#airlines">航空情報</a></li>
     <li><a href="#about">關於我們</a></li>
     <li><a href="#sponsor">贊助我們</a></li>
@@ -364,6 +365,7 @@ footer{position:relative;z-index:1;background:rgba(0,0,0,.3);border-top:1px soli
 </nav>
 <div class="mobile-menu" id="mobileMenu">
   <a href="#deals">✈ 特惠看板</a>
+  <a href="routes/">🗺 全部航線</a>
   <a href="#airlines">🏢 航空情報</a>
   <a href="#about">ℹ️ 關於我們</a>
   <a href="#sponsor">💛 贊助我們</a>
@@ -442,6 +444,19 @@ footer{position:relative;z-index:1;background:rgba(0,0,0,.3);border-top:1px soli
         <div class="bargain-sub">每次排程更新・含與上次比較的漲跌</div>
       </div>
       <pre id="reportBox" style="margin:0;padding:18px 20px;white-space:pre-wrap;word-break:break-word;font-family:'Menlo','Consolas',monospace;font-size:13px;line-height:1.7;color:#e8eaed;background:rgba(0,0,0,.18);border-radius:12px;overflow-x:auto">載入中…</pre>
+    </div>
+  </div>
+</section>
+
+<!-- Price Trend (全站最低價走勢，讀 price_history.csv) -->
+<section class="section" id="price-trend" style="padding-top:0">
+  <div class="container">
+    <div class="bargain-section">
+      <div class="bargain-header">
+        <div class="bargain-title">📈 全站最低價走勢</div>
+        <div class="bargain-sub">每日最低成交行情・累積越久越準</div>
+      </div>
+      <div id="trendBox" style="padding:10px 8px;background:rgba(0,0,0,.18);border-radius:12px;color:var(--g400);font-size:.85rem;text-align:center">載入中…</div>
     </div>
   </div>
 </section>
@@ -607,11 +622,12 @@ footer{position:relative;z-index:1;background:rgba(0,0,0,.3);border-top:1px soli
     <div class="footer-col">
       <h4>熱門航線</h4>
       <ul class="footer-links">
-        <li><a href="#">台北 → 東京</a></li>
-        <li><a href="#">台北 → 大阪</a></li>
-        <li><a href="#">台北 → 首爾</a></li>
-        <li><a href="#">台北 → 上海</a></li>
-        <li><a href="#">台北 → 曼谷</a></li>
+        <li><a href="routes/tpe-nrt.html">台北 → 東京</a></li>
+        <li><a href="routes/tpe-kix.html">台北 → 大阪</a></li>
+        <li><a href="routes/tpe-icn.html">台北 → 首爾</a></li>
+        <li><a href="routes/tpe-pvg.html">台北 → 上海</a></li>
+        <li><a href="routes/tpe-bkk.html">台北 → 曼谷</a></li>
+        <li><a href="routes/">全部航線 →</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -797,6 +813,47 @@ async function loadReport() {
     box.textContent = txt || '尚無快報資料。等排程跑過一次後就會顯示。'
   } catch(e) {
     box.textContent = '尚無快報資料。等排程（08:00 / 20:00）跑過一次後就會顯示。'
+  }
+}
+
+// ─── 全站最低價走勢圖（讀 price_history.csv，純 SVG 免外部函式庫）──
+async function loadTrend() {
+  const box = document.getElementById('trendBox')
+  if (!box) return
+  try {
+    const r = await fetch('price_history.csv?' + Date.now())
+    if (!r.ok) throw new Error('no history')
+    const rows = (await r.text()).replace(/^﻿/, '').trim().split(/\r?\n/).slice(1)
+      .map(l => l.split(','))
+      .filter(c => c.length >= 4 && !isNaN(+c[3]))
+    // 每日取最低價
+    const byDay = {}
+    rows.forEach(c => {
+      const day = c[0].slice(0, 10), p = +c[3]
+      if (!(day in byDay) || p < byDay[day]) byDay[day] = p
+    })
+    const days = Object.keys(byDay).sort()
+    if (days.length < 2) { box.textContent = '資料累積中，至少需 2 天紀錄才會顯示走勢。'; return }
+    const pts = days.map(d => byDay[d])
+    const W = 760, H = 200, P = 36
+    const min = Math.min(...pts), max = Math.max(...pts), span = (max - min) || 1
+    const x = i => P + i * (W - 2 * P) / (days.length - 1)
+    const y = p => H - P - (p - min) * (H - 2 * P) / span
+    const path = pts.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(p).toFixed(1)}`).join(' ')
+    const dots = pts.map((p, i) =>
+      `<circle cx="${x(i).toFixed(1)}" cy="${y(p).toFixed(1)}" r="3.5" fill="#fbbf24"><title>${days[i]}　$${p.toLocaleString()}</title></circle>`).join('')
+    const labelEvery = Math.max(1, Math.ceil(days.length / 8))
+    const labels = days.map((d, i) => i % labelEvery ? '' :
+      `<text x="${x(i).toFixed(1)}" y="${H - 10}" font-size="10" fill="#9aa0a6" text-anchor="middle">${d.slice(5)}</text>`).join('')
+    box.style.textAlign = 'left'
+    box.innerHTML =
+      `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" role="img" aria-label="全站最低價走勢圖">
+        <text x="${P}" y="16" font-size="11" fill="#9aa0a6">最低 $${min.toLocaleString()}　最高 $${max.toLocaleString()}　共 ${days.length} 天</text>
+        <path d="${path}" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linejoin="round"/>
+        ${dots}${labels}
+      </svg>`
+  } catch(e) {
+    box.textContent = '尚無歷史資料。等排程跑過幾次後就會顯示走勢。'
   }
 }
 
@@ -1221,6 +1278,7 @@ window.__DEALS__ = {"stats": {"total": 76, "by_region": {"northeast_asia": 23, "
 // ─── Boot ─────────────────────────────────────────────────────
 loadDeals()
 loadReport()
+loadTrend()
 </script>
 </body>
 </html>
