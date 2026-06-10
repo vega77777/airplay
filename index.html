@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>飛出台灣 — 全球限時特惠機票情報站</title>
+<meta name="description" content="專攻台灣起飛限時促銷機票，即時抓取 8 家航空公司官網，直達訂票連結">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ── Variables ─────────────────────────────── */
+:root{
+  --navy:#0B1426;--navy-mid:#132040;--blue:#1A3A6B;--blue-l:#2563EB;--blue-g:#3B82F6;
+  --orange:#FF6B35;--orange-l:#FF8C5A;--orange-glow:rgba(255,107,53,.3);
+  --white:#fff;--g100:#F1F5F9;--g200:#E2E8F0;--g400:#94A3B8;--g600:#475569;
+  --green:#10B981;--red:#EF4444;--yellow:#F59E0B;
+  --card:#rgba(255,255,255,.04);--border:rgba(255,255,255,.08);--glass:rgba(255,255,255,.06);
+  --shadow:0 8px 32px rgba(0,0,0,.4);--r:16px;--r-sm:10px;
+  --font:'Inter','Noto Sans TC',sans-serif;--tr:all .25s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--navy);color:var(--white);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:var(--font);border:none;outline:none}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--navy-mid)}::-webkit-scrollbar-thumb{background:var(--blue);border-radius:3px}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(37,99,235,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.05) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+
+/* ── Navbar ─────────────────────────────────── */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 1.5rem;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(11,20,38,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:var(--tr)}
+.navbar.scrolled{background:rgba(11,20,38,.97);box-shadow:0 4px 24px rgba(0,0,0,.5)}
+.nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.2rem;letter-spacing:-.02em}
+.nav-logo .plane{width:36px;height:36px;background:linear-gradient(135deg,var(--orange),var(--orange-l));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 4px 12px var(--orange-glow)}
+.nav-logo span{color:var(--orange)}
+.nav-links{display:flex;align-items:center;gap:.25rem;list-style:none}
+.nav-links a{padding:6px 14px;border-radius:8px;font-size:.88rem;font-weight:500;color:var(--g400);transition:var(--tr)}
+.nav-links a:hover,.nav-links a.active{color:var(--white);background:var(--glass)}
+.nav-right{display:flex;align-items:center;gap:.75rem}
+.btn-radar{padding:8px 18px;background:linear-gradient(135deg,var(--orange),var(--orange-l));color:white;border-radius:8px;font-size:.85rem;font-weight:600;transition:var(--tr);box-shadow:0 4px 12px var(--orange-glow)}
+.btn-radar:hover{transform:translateY(-1px);box-shadow:0 6px 20px var(--orange-glow)}
+.hamburger{display:none;flex-direction:column;gap:5px;padding:8px;background:var(--glass);border-radius:8px;border:1px solid var(--border)}
+.hamburger span{width:22px;height:2px;background:var(--white);border-radius:2px;transition:var(--tr);display:block}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(11,20,38,.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:1rem 1.5rem 1.5rem;z-index:999;flex-direction:column;gap:.25rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{padding:12px 16px;border-radius:10px;font-weight:500;color:var(--g400);transition:var(--tr)}
+.mobile-menu a:hover{color:var(--white);background:var(--glass)}
+.mobile-menu .btn-radar{text-align:center;margin-top:.5rem}
+
+/* ── Hero ───────────────────────────────────── */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:80px 1.5rem 60px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(37,99,235,.25) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 80% 80%,rgba(255,107,53,.12) 0%,transparent 50%),linear-gradient(180deg,var(--navy) 0%,#0D1B35 100%)}
+.hero-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.particle{position:absolute;border-radius:50%;background:rgba(59,130,246,.12);animation:float linear infinite}
+@keyframes float{0%{transform:translateY(100vh) rotate(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-100px) rotate(360deg);opacity:0}}
+.hero-content{position:relative;z-index:1;max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(255,107,53,.15);border:1px solid rgba(255,107,53,.3);border-radius:100px;font-size:.8rem;font-weight:600;color:var(--orange-l);margin-bottom:1.5rem;letter-spacing:.02em}
+.hero-badge .dot{width:7px;height:7px;background:var(--orange);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.hero h1{font-size:clamp(2rem,4vw,3.2rem);font-weight:900;line-height:1.15;letter-spacing:-.03em;margin-bottom:1.25rem}
+.hero h1 .hl{background:linear-gradient(135deg,var(--orange) 0%,#FF9500 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-desc{font-size:1.05rem;color:var(--g400);line-height:1.7;margin-bottom:2rem;max-width:480px}
+.hero-stats{display:flex;gap:2rem;margin-bottom:2.5rem}
+.stat-num{font-size:1.6rem;font-weight:800;line-height:1}
+.stat-lbl{font-size:.78rem;color:var(--g400);margin-top:4px}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:linear-gradient(135deg,var(--orange),#FF9500);color:white;border-radius:12px;font-size:.95rem;font-weight:700;transition:var(--tr);box-shadow:0 6px 24px var(--orange-glow)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px var(--orange-glow)}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--glass);border:1px solid var(--border);color:var(--white);border-radius:12px;font-size:.95rem;font-weight:600;transition:var(--tr);backdrop-filter:blur(10px)}
+.btn-secondary:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
+/* Hero Top Deal Card */
+.hero-card-wrap{position:relative}
+.hero-card-wrap::before{content:'';position:absolute;inset:-2px;background:linear-gradient(135deg,var(--blue-g),var(--orange));border-radius:22px;opacity:.3;filter:blur(1px)}
+.hero-deal{position:relative;background:linear-gradient(145deg,rgba(26,58,107,.8),rgba(11,20,38,.95));border:1px solid rgba(59,130,246,.2);border-radius:20px;padding:1.75rem;backdrop-filter:blur(20px);box-shadow:var(--shadow)}
+.hd-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.al-logo{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900}
+.lcc-tag{padding:3px 10px;background:rgba(255,107,53,.2);border:1px solid rgba(255,107,53,.3);border-radius:100px;font-size:.72rem;font-weight:700;color:var(--orange-l)}
+.trad-tag{padding:3px 10px;background:rgba(37,99,235,.2);border:1px solid rgba(37,99,235,.3);border-radius:100px;font-size:.72rem;font-weight:700;color:#93C5FD}
+.route{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.city-code{font-size:1.6rem;font-weight:900;letter-spacing:-.02em}
+.city-name{font-size:.72rem;color:var(--g400)}
+.fl-line{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.fl-dots{width:100%;display:flex;align-items:center;gap:4px}
+.fl-dots::before,.fl-dots::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--g600))}
+.fl-dots::after{background:linear-gradient(90deg,var(--g600),transparent)}
+.price-row{display:flex;align-items:flex-end;gap:.75rem;margin-bottom:1rem}
+.price-main{font-size:2.2rem;font-weight:900;color:var(--orange);line-height:1;letter-spacing:-.03em}
+.disc-badge{padding:3px 10px;background:rgba(16,185,129,.2);border:1px solid rgba(16,185,129,.3);border-radius:100px;font-size:.75rem;font-weight:700;color:#34D399}
+.card-meta{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.2rem;padding:.9rem;background:rgba(255,255,255,.03);border-radius:12px;border:1px solid var(--border)}
+.meta-item{font-size:.78rem;color:var(--g400)}
+.meta-item strong{display:block;color:var(--white);font-weight:600;margin-top:2px;font-size:.82rem}
+.cdown-bar{background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.2);border-radius:10px;padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.cdown-lbl{font-size:.78rem;color:var(--orange-l);font-weight:600}
+.cdown-digits{font-size:1.3rem;font-weight:800;color:var(--orange);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.card-actions{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.btn-book{padding:11px;background:linear-gradient(135deg,var(--orange),#FF9500);color:white;border-radius:10px;font-size:.85rem;font-weight:700;text-align:center;transition:var(--tr);box-shadow:0 4px 12px var(--orange-glow)}
+.btn-book:hover{transform:translateY(-1px);box-shadow:0 6px 20px var(--orange-glow)}
+.btn-save{padding:11px;background:var(--glass);border:1px solid var(--border);color:var(--g400);border-radius:10px;font-size:.85rem;font-weight:600;text-align:center;transition:var(--tr)}
+.btn-save:hover{color:var(--white);background:rgba(255,255,255,.08)}
+.hot-ind{display:flex;align-items:center;gap:6px;font-size:.75rem;color:var(--g400);margin-top:.75rem;justify-content:center}
+.hot-dot{width:6px;height:6px;background:var(--orange);border-radius:50%;animation:pulse 1.5s ease-in-out infinite}
+.scroll-ind{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--g600);font-size:.75rem;animation:bounce 2s ease-in-out infinite;z-index:1}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-6px)}}
+.scroll-mouse{width:22px;height:36px;border:2px solid var(--g600);border-radius:100px;display:flex;align-items:flex-start;justify-content:center;padding-top:6px}
+.scroll-wheel{width:3px;height:6px;background:var(--g600);border-radius:2px;animation:sw 2s ease-in-out infinite}
+@keyframes sw{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(10px)}}
+
+/* ── Ticker ─────────────────────────────────── */
+.ticker-wrap{background:rgba(255,107,53,.08);border-top:1px solid rgba(255,107,53,.15);border-bottom:1px solid rgba(255,107,53,.15);padding:10px 0;overflow:hidden;position:relative;z-index:1}
+.ticker-inner{display:flex;width:max-content;animation:ticker 40s linear infinite}
+.ticker-inner:hover{animation-play-state:paused}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{display:flex;align-items:center;gap:8px;padding:0 2.5rem;font-size:.82rem;color:var(--orange-l);font-weight:500;white-space:nowrap}
+.ticker-item .tp{font-weight:800;color:var(--orange)}
+.ticker-sep{color:rgba(255,107,53,.3);font-size:1rem}
+
+/* ── Section ─────────────────────────────────── */
+.section{position:relative;z-index:1;padding:5rem 1.5rem}
+.section-alt{background:rgba(255,255,255,.015)}
+.container{max-width:1200px;margin:0 auto}
+.section-header{margin-bottom:2.5rem}
+.section-label{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:.75rem}
+.section-label::before{content:'';width:20px;height:2px;background:var(--orange);border-radius:1px}
+.section-title{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;letter-spacing:-.03em;line-height:1.2}
+.section-subtitle{font-size:.95rem;color:var(--g400);margin-top:.5rem}
+/* Stats strip */
+.stats-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2rem}
+.stat-card{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;text-align:center;transition:var(--tr)}
+.stat-card:hover{transform:translateY(-2px);border-color:rgba(59,130,246,.25)}
+.stat-icon{font-size:1.5rem;margin-bottom:.5rem}
+.stat-number{font-size:2rem;font-weight:900;letter-spacing:-.04em;background:linear-gradient(135deg,var(--white),var(--g400));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:.78rem;color:var(--g600);margin-top:.25rem}
+
+/* ── Filter Bar ───────────────────────────── */
+.filter-wrap{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem;margin-bottom:2rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center}
+.filter-group{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.filter-label{font-size:.72rem;font-weight:700;color:var(--g400);letter-spacing:.05em;text-transform:uppercase;margin-right:.25rem;white-space:nowrap}
+.filter-btn{padding:6px 14px;background:transparent;border:1px solid var(--border);border-radius:100px;font-size:.8rem;font-weight:600;color:var(--g400);transition:var(--tr)}
+.filter-btn:hover{border-color:var(--blue-g);color:var(--white)}
+.filter-btn.active{background:rgba(37,99,235,.2);border-color:var(--blue-g);color:var(--white)}
+.filter-btn.ao{background:rgba(255,107,53,.2);border-color:var(--orange);color:var(--orange-l)}
+.filter-divider{width:1px;height:24px;background:var(--border)}
+.sort-select{padding:6px 14px;background:var(--glass);border:1px solid var(--border);border-radius:8px;font-size:.8rem;font-weight:600;color:var(--white);cursor:pointer;outline:none;margin-left:auto}
+.sort-select option{background:var(--navy-mid)}
+.results-count{font-size:.8rem;color:var(--g400);font-weight:600}
+
+/* ── Region Tabs ─────────────────────────── */
+.region-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.region-tab{padding:7px 18px;background:transparent;border:1px solid var(--border);border-radius:100px;font-size:.82rem;font-weight:600;color:var(--g400);transition:var(--tr);display:flex;align-items:center;gap:6px}
+.region-tab:hover{color:var(--white);border-color:rgba(255,255,255,.2)}
+.region-tab.active{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.25);color:var(--white)}
+.region-tab .cnt{background:rgba(255,107,53,.25);color:var(--orange-l);padding:1px 7px;border-radius:100px;font-size:.7rem;font-weight:700}
+
+/* ── Promo Grid ──────────────────────────── */
+.promo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.25rem}
+.promo-card{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:var(--tr);cursor:pointer;position:relative}
+.promo-card:hover{transform:translateY(-4px);border-color:rgba(59,130,246,.3);box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 0 1px rgba(59,130,246,.1)}
+.promo-card.urgent{border-color:rgba(255,107,53,.25)}
+.promo-card.urgent:hover{border-color:rgba(255,107,53,.5);box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 0 1px rgba(255,107,53,.15)}
+/* Dest Image */
+.card-img{height:120px;position:relative;overflow:hidden}
+.card-img .bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .4s ease}
+.promo-card:hover .bg{transform:scale(1.07)}
+.card-img .ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1) 0%,rgba(11,20,38,.75) 100%)}
+.card-img .dest-n{position:absolute;bottom:.75rem;left:1rem;font-size:1.05rem;font-weight:800;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.card-img .dest-c{position:absolute;bottom:.75rem;right:1rem;font-size:.7rem;color:rgba(255,255,255,.7);background:rgba(0,0,0,.4);padding:2px 8px;border-radius:100px;backdrop-filter:blur(4px)}
+.ribbon{position:absolute;top:.75rem;left:.75rem;padding:3px 10px;background:linear-gradient(135deg,var(--orange),#FF9500);border-radius:100px;font-size:.68rem;font-weight:800;color:white;letter-spacing:.03em;box-shadow:0 2px 8px var(--orange-glow)}
+.new-badge{position:absolute;top:.75rem;right:.75rem;padding:3px 10px;background:rgba(16,185,129,.2);border:1px solid rgba(16,185,129,.4);border-radius:100px;font-size:.68rem;font-weight:700;color:#34D399}
+/* Card Body */
+.card-body{padding:1rem 1.2rem 1.2rem}
+.card-airline-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.card-al-name{font-size:.82rem;font-weight:600;color:var(--g400)}
+.price-row2{display:flex;align-items:flex-end;gap:.5rem;margin-bottom:.4rem}
+.card-price{font-size:1.7rem;font-weight:900;color:var(--white);letter-spacing:-.03em;line-height:1}
+.card-price-unit{font-size:.82rem;color:var(--g400);line-height:1.8}
+.card-price-tax{font-size:.75rem;color:var(--g400);margin-bottom:.75rem}
+.card-price-tax span{color:var(--orange-l);font-weight:600}
+.card-cdown{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--g400);margin-bottom:.9rem;padding:6px 10px;background:rgba(255,255,255,.03);border-radius:8px}
+.card-cdown .t{color:var(--orange);font-weight:700;font-variant-numeric:tabular-nums}
+.urgent .card-cdown .t{color:var(--red)}
+.card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:.75rem;border-top:1px solid var(--border)}
+.hot-cnt{display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--g600)}
+.btn-go{display:flex;align-items:center;gap:5px;padding:7px 14px;background:linear-gradient(135deg,var(--orange),#FF9500);color:white;border-radius:8px;font-size:.8rem;font-weight:700;transition:var(--tr);box-shadow:0 3px 10px var(--orange-glow)}
+.btn-go:hover{transform:translateY(-1px);box-shadow:0 5px 16px var(--orange-glow)}
+/* Load More */
+.load-more-wrap{text-align:center;margin-top:2.5rem}
+.btn-lm{padding:13px 36px;background:var(--glass);border:1px solid var(--border);color:var(--g400);border-radius:12px;font-size:.9rem;font-weight:600;transition:var(--tr);backdrop-filter:blur(8px)}
+.btn-lm:hover{color:var(--white);border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.06)}
+/* Empty state */
+.empty-state{text-align:center;padding:4rem 1rem;color:var(--g400)}
+.empty-state .ei{font-size:3rem;margin-bottom:1rem}
+
+/* ── Airline Section ─────────────────────── */
+.airline-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
+.airline-card{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;display:flex;flex-direction:column;align-items:center;gap:.75rem;text-align:center;transition:var(--tr);cursor:pointer}
+.airline-card:hover{transform:translateY(-3px);border-color:rgba(59,130,246,.3);background:rgba(255,255,255,.05)}
+.al-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:900}
+.al-card-name{font-size:.9rem;font-weight:700}
+.al-card-sub{font-size:.72rem;color:var(--g400)}
+.al-deals{font-size:.75rem;color:var(--orange-l);font-weight:600;padding:3px 10px;background:rgba(255,107,53,.1);border-radius:100px}
+.al-tabs{display:flex;gap:.5rem;margin-bottom:2rem;flex-wrap:wrap}
+.al-tab{padding:8px 20px;background:transparent;border:1px solid var(--border);border-radius:100px;font-size:.85rem;font-weight:600;color:var(--g400);transition:var(--tr)}
+.al-tab.active{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:var(--white)}
+.al-tab:hover{color:var(--white);border-color:rgba(255,255,255,.15)}
+
+/* ── Radar Section ───────────────────────── */
+.radar-section{background:linear-gradient(135deg,rgba(26,58,107,.6) 0%,rgba(11,20,38,.8) 100%);border:1px solid rgba(59,130,246,.15);border-radius:24px;padding:3rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;position:relative;overflow:hidden}
+.radar-section::before{content:'';position:absolute;top:-50%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(37,99,235,.15) 0%,transparent 70%);pointer-events:none}
+.radar-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);border-radius:100px;font-size:.78rem;font-weight:700;color:#34D399;margin-bottom:1rem}
+.radar-title{font-size:clamp(1.4rem,2.5vw,1.9rem);font-weight:800;line-height:1.25;letter-spacing:-.025em;margin-bottom:1rem}
+.radar-desc{font-size:.9rem;color:var(--g400);line-height:1.7;margin-bottom:1.5rem}
+.radar-channels{display:flex;gap:.75rem;flex-wrap:wrap}
+.ch-btn{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;font-size:.85rem;font-weight:700;transition:var(--tr);border:1px solid}
+.ch-line{background:rgba(0,185,60,.15);border-color:rgba(0,185,60,.3);color:#4ADE80}.ch-line:hover{background:rgba(0,185,60,.25)}
+.ch-tg{background:rgba(0,136,204,.15);border-color:rgba(0,136,204,.3);color:#60A5FA}.ch-tg:hover{background:rgba(0,136,204,.25)}
+.ch-em{background:rgba(168,85,247,.15);border-color:rgba(168,85,247,.3);color:#C084FC}.ch-em:hover{background:rgba(168,85,247,.25)}
+.radar-prefs{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:16px;padding:1.5rem}
+.rp-title{font-size:.9rem;font-weight:700;margin-bottom:1rem}
+.pref-group{margin-bottom:1rem}
+.pref-label{font-size:.72rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem}
+.pref-chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.pref-chip{padding:5px 12px;background:transparent;border:1px solid var(--border);border-radius:100px;font-size:.78rem;font-weight:600;color:var(--g400);cursor:pointer;transition:var(--tr)}
+.pref-chip:hover{color:var(--white);border-color:rgba(255,255,255,.2)}
+.pref-chip.sel{background:rgba(37,99,235,.2);border-color:var(--blue-g);color:#93C5FD}
+.pref-input{width:100%;padding:10px 14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;color:var(--white);font-size:.88rem;font-family:var(--font);outline:none;transition:var(--tr)}
+.pref-input:focus{border-color:var(--blue-g);background:rgba(255,255,255,.06)}
+.pref-input::placeholder{color:var(--g600)}
+.btn-subscribe{width:100%;padding:13px;background:linear-gradient(135deg,var(--blue-l),var(--blue-g));color:white;border-radius:12px;font-size:.9rem;font-weight:700;margin-top:1rem;transition:var(--tr);box-shadow:0 4px 16px rgba(37,99,235,.3)}
+.btn-subscribe:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(37,99,235,.4)}
+
+/* ── Footer ──────────────────────────────── */
+footer{position:relative;z-index:1;background:rgba(0,0,0,.3);border-top:1px solid var(--border);padding:3rem 1.5rem 2rem}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2.5rem}
+.footer-desc{font-size:.83rem;color:var(--g600);line-height:1.7;margin:1rem 0 1.25rem}
+.footer-social{display:flex;gap:.5rem}
+.social-btn{width:36px;height:36px;background:var(--glass);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:var(--tr)}
+.social-btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15)}
+.footer-col h4{font-size:.85rem;font-weight:700;margin-bottom:1rem}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.footer-links a{font-size:.82rem;color:var(--g600);transition:var(--tr)}
+.footer-links a:hover{color:var(--g400)}
+.footer-bottom{max-width:1200px;margin:2rem auto 0;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:.78rem;color:var(--g600);flex-wrap:wrap;gap:.5rem}
+.footer-disclaimer{font-size:.72rem;color:rgba(255,255,255,.2);max-width:600px}
+
+/* ── Toast ───────────────────────────────── */
+.toast-wrap{position:fixed;bottom:1.5rem;right:1.5rem;z-index:2000;display:flex;flex-direction:column;gap:.75rem;pointer-events:none}
+.toast{pointer-events:all;background:rgba(11,20,38,.95);border:1px solid rgba(59,130,246,.3);border-radius:14px;padding:1rem 1.25rem;min-width:280px;max-width:340px;backdrop-filter:blur(20px);box-shadow:0 8px 32px rgba(0,0,0,.5);animation:slideIn .35s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;gap:.75rem}
+@keyframes slideIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+.toast-icon{font-size:1.2rem;flex-shrink:0}
+.toast-text{flex:1;font-size:.82rem;line-height:1.4}
+.toast-text strong{display:block;font-weight:700;color:var(--white);margin-bottom:2px}
+.toast-text span{color:var(--g400)}
+.toast-close{background:none;border:none;color:var(--g600);font-size:1rem;cursor:pointer;flex-shrink:0}
+
+/* ── Modal ───────────────────────────────── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:3000;align-items:center;justify-content:center;padding:1.5rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--navy-mid);border:1px solid rgba(59,130,246,.2);border-radius:20px;padding:2rem;max-width:480px;width:100%;box-shadow:0 24px 80px rgba(0,0,0,.6);animation:mi .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes mi{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.modal-title{font-size:1.15rem;font-weight:800}
+.modal-close{background:var(--glass);border:1px solid var(--border);color:var(--g400);width:32px;height:32px;border-radius:8px;font-size:1rem;cursor:pointer;transition:var(--tr)}
+.modal-close:hover{color:var(--white);background:rgba(255,255,255,.08)}
+
+/* ── Loading ─────────────────────────────── */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem;gap:1rem;color:var(--g400)}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:.9rem;font-weight:500}
+
+/* ── Responsive ─────────────────────────── */
+@media(max-width:1024px){
+  .hero-content{grid-template-columns:1fr;gap:3rem;text-align:center}
+  .hero-desc{margin:0 auto 2rem}
+  .hero-stats{justify-content:center}
+  .hero-actions{justify-content:center}
+  .hero-card-wrap{max-width:460px;margin:0 auto}
+  .footer-inner{grid-template-columns:1fr 1fr;gap:2rem}
+  .stats-strip{grid-template-columns:repeat(2,1fr)}
+  .radar-section{grid-template-columns:1fr;gap:2rem}
+}
+@media(max-width:768px){
+  .nav-links,.nav-right .btn-radar{display:none}
+  .hamburger{display:flex}
+  .hero{padding:80px 1rem 60px}
+  .section{padding:3.5rem 1rem}
+  .filter-wrap{gap:.75rem}
+  .filter-divider{display:none}
+  .sort-select{margin-left:0;width:100%}
+  .promo-grid{grid-template-columns:1fr}
+  .airline-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-inner{grid-template-columns:1fr;gap:1.75rem}
+  .footer-bottom{flex-direction:column;text-align:center}
+  .radar-prefs{display:none}
+  .toast-wrap{left:1rem;right:1rem;bottom:1rem}
+  .toast{min-width:unset;max-width:100%}
+  .stats-strip{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:480px){
+  .hero h1{font-size:1.8rem}
+  .region-tabs{gap:.4rem}
+  .region-tab{padding:6px 12px;font-size:.75rem}
+}
+@media(min-width:1400px){
+  .promo-grid{grid-template-columns:repeat(4,1fr)}
+}
+
+/* ── Bargain Board ───────────────────────────────────── */
+.bargain-section{background:linear-gradient(135deg,rgba(255,107,53,.12),rgba(239,68,68,.08));border:1px solid rgba(255,107,53,.3);border-radius:20px;padding:1.5rem;margin:2rem 0}
+.bargain-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.bargain-title{font-size:1.2rem;font-weight:800;color:var(--white)}
+.bargain-sub{font-size:.78rem;color:var(--g400);margin-left:auto}
+.bargain-pulse{width:10px;height:10px;background:var(--red);border-radius:50%;animation:pulse 1.2s infinite;flex-shrink:0}
+.bargain-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.75rem}
+.bargain-item{background:rgba(255,255,255,.05);border:1px solid rgba(255,107,53,.2);border-radius:12px;padding:.9rem 1rem;cursor:pointer;transition:var(--tr);position:relative;overflow:hidden}
+.bargain-item:hover{background:rgba(255,107,53,.15);transform:translateY(-2px);border-color:var(--orange)}
+.bargain-rank{position:absolute;top:.5rem;right:.6rem;font-size:.72rem;font-weight:800;color:rgba(255,255,255,.3)}
+.bargain-rank.top3{color:var(--orange)}
+.bargain-dest{font-size:.88rem;font-weight:700;color:var(--white);margin-bottom:.2rem}
+.bargain-al{font-size:.72rem;color:var(--g400);margin-bottom:.4rem}
+.bargain-price{font-size:1.3rem;font-weight:900;color:var(--orange);line-height:1}
+.bargain-price span{font-size:.7rem;font-weight:500;color:var(--g400);margin-left:3px}
+.bargain-disc{display:inline-block;background:rgba(239,68,68,.25);color:#fca5a5;font-size:.65rem;font-weight:700;padding:2px 6px;border-radius:4px;margin-top:.3rem}
+.badge-bust{display:inline-block;background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:4px;margin-left:4px;vertical-align:middle;letter-spacing:.03em}
+.badge-deal{display:inline-block;background:linear-gradient(135deg,#d97706,#f59e0b);color:#fff;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:4px;margin-left:4px;vertical-align:middle;letter-spacing:.03em}
+@media(max-width:480px){.bargain-list{grid-template-columns:1fr 1fr}}
+
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar" id="navbar">
+  <a href="#" class="nav-logo">
+    <div class="plane">✈</div>
+    飛出<span>台灣</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#deals" class="active">特惠看板</a></li>
+    <li><a href="#airlines">航空情報</a></li>
+    <li><a href="#radar">雷達訂閱</a></li>
+    <li><a href="#">知識庫</a></li>
+    <li><a href="#">關於我們</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#radar" class="btn-radar">🔔 開啟雷達</a>
+    <button class="hamburger" id="hamburger" aria-label="選單">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#deals">✈ 特惠看板</a>
+  <a href="#airlines">🏢 航空情報</a>
+  <a href="#radar">🔔 雷達訂閱</a>
+  <a href="#">📚 知識庫</a>
+  <a href="#">ℹ️ 關於我們</a>
+  <a href="#radar" class="btn-radar">🔔 開啟雷達</a>
+</div>
+
+<!-- Hero -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-particles" id="particles"></div>
+  <div class="hero-content container">
+    <div>
+      <div class="hero-badge"><span class="dot"></span>即時更新 · 每 15 分鐘掃描</div>
+      <h1>搶到最低價<br><span class="hl">限時特惠</span>機票<br>從台灣飛向世界</h1>
+      <p class="hero-desc">聚合 8 家航空公司官網促銷，自動監控日本、中國大陸、東南亞及歐美航線，直達官方訂票頁。</p>
+      <div class="hero-stats">
+        <div><div class="stat-num" id="hs-total">--</div><div class="stat-lbl">今日有效促銷</div></div>
+        <div><div class="stat-num">8</div><div class="stat-lbl">家航空公司</div></div>
+        <div><div class="stat-num">2,847</div><div class="stat-lbl">雷達訂閱人數</div></div>
+      </div>
+      <div class="hero-actions">
+        <a href="#deals" class="btn-primary">🔥 立即搶票 →</a>
+        <a href="#radar" class="btn-secondary">🔔 設定雷達</a>
+      </div>
+    </div>
+    <!-- Top deal card (populated by JS) -->
+    <div class="hero-card-wrap">
+      <div class="hero-deal" id="heroDeal">
+        <div style="text-align:center;padding:2rem;color:var(--g400)">
+          <div class="spinner" style="margin:0 auto 1rem"></div>載入全站最低價…
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-ind"><div class="scroll-mouse"><div class="scroll-wheel"></div></div><span>向下探索</span></div>
+</section>
+
+<!-- Ticker (populated by JS) -->
+<div class="ticker-wrap"><div class="ticker-inner" id="tickerInner">載入中…</div></div>
+
+<!-- Stats Strip -->
+<section class="section" style="padding-top:3rem;padding-bottom:0">
+  <div class="container">
+    <div class="stats-strip">
+      <div class="stat-card"><div class="stat-icon">✈</div><div class="stat-number" id="st-total">--</div><div class="stat-label">今日有效促銷</div></div>
+      <div class="stat-card"><div class="stat-icon">🏢</div><div class="stat-number">8</div><div class="stat-label">監控航空公司</div></div>
+      <div class="stat-card"><div class="stat-icon">🔔</div><div class="stat-number">2,847</div><div class="stat-label">雷達訂閱人數</div></div>
+      <div class="stat-card"><div class="stat-icon">⏱</div><div class="stat-number">15<span style="font-size:1rem">分</span></div><div class="stat-label">資料更新頻率</div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Bargain Board -->
+<section class="section" id="bargain-board" style="padding-top:0">
+  <div class="container">
+    <div class="bargain-section">
+      <div class="bargain-header">
+        <div class="bargain-pulse"></div>
+        <div class="bargain-title">🔥 今日破盤榜</div>
+        <div class="bargain-sub">全站最低價 TOP 5・即時更新</div>
+      </div>
+      <div class="bargain-list" id="bargainList">
+        <!-- filled by JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Price Report (簡單版快報) -->
+<section class="section" id="price-report" style="padding-top:0">
+  <div class="container">
+    <div class="bargain-section">
+      <div class="bargain-header">
+        <div class="bargain-title">📋 最低價快報</div>
+        <div class="bargain-sub">每次排程更新・含與上次比較的漲跌</div>
+      </div>
+      <pre id="reportBox" style="margin:0;padding:18px 20px;white-space:pre-wrap;word-break:break-word;font-family:'Menlo','Consolas',monospace;font-size:13px;line-height:1.7;color:#e8eaed;background:rgba(0,0,0,.18);border-radius:12px;overflow-x:auto">載入中…</pre>
+    </div>
+  </div>
+</section>
+
+<!-- Deals Section -->
+<section class="section" id="deals">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">即時動態</div>
+      <h2 class="section-title">今日特惠搶票看板</h2>
+      <p class="section-subtitle">票價為市場行情參考，按「官網搜尋」直達各航空公司官方搜尋頁，以官網實際顯示為準</p>
+    </div>
+
+    <!-- Region tabs -->
+    <div class="region-tabs" id="regionTabs">
+      <button class="region-tab active" data-region="all" onclick="setRegion(this,'all')">全部 <span class="cnt" id="cnt-all">--</span></button>
+      <button class="region-tab" data-region="northeast_asia" onclick="setRegion(this,'northeast_asia')">🇯🇵 東北亞 <span class="cnt" id="cnt-northeast_asia">--</span></button>
+      <button class="region-tab" data-region="china" onclick="setRegion(this,'china')">🇨🇳 中國大陸 <span class="cnt" id="cnt-china">--</span></button>
+      <button class="region-tab" data-region="southeast_asia" onclick="setRegion(this,'southeast_asia')">🌴 東南亞 <span class="cnt" id="cnt-southeast_asia">--</span></button>
+      <button class="region-tab" data-region="europe" onclick="setRegion(this,'europe')">🇪🇺 歐洲 <span class="cnt" id="cnt-europe">--</span></button>
+      <button class="region-tab" data-region="americas" onclick="setRegion(this,'americas')">🗽 美洲 <span class="cnt" id="cnt-americas">--</span></button>
+      <button class="region-tab" data-region="oceania" onclick="setRegion(this,'oceania')">🦘 大洋洲 <span class="cnt" id="cnt-oceania">--</span></button>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-wrap">
+      <div class="filter-group">
+        <span class="filter-label">類型</span>
+        <button class="filter-btn active" id="typeAll" onclick="setType(this,'all')">全部</button>
+        <button class="filter-btn" id="typeLcc" onclick="setType(this,'lcc')">廉航</button>
+        <button class="filter-btn" id="typeFull" onclick="setType(this,'full')">傳統航空</button>
+      </div>
+      <div class="filter-divider"></div>
+      <div class="filter-group">
+        <span class="filter-label">航空公司</span>
+        <select id="airlineSelect" onchange="applyFilters()" style="padding:6px 12px;background:var(--glass);border:1px solid var(--border);border-radius:100px;font-size:.8rem;font-weight:600;color:var(--white);outline:none;cursor:pointer">
+          <option value="">全部</option>
+        </select>
+      </div>
+      <div class="filter-divider"></div>
+      <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+        <option value="urgent">最快截止</option>
+        <option value="latest">最新上架</option>
+        <option value="discount">折扣最高</option>
+        <option value="price_asc" selected>票價最低 🔥</option>
+        <option value="hot">最熱點擊</option>
+      </select>
+      <span class="results-count" id="resultsCount"></span>
+      <span style="font-size:.72rem;color:var(--g600);margin-left:.5rem">📊 票價為市場行情參考，以官網為準</span>
+    </div>
+
+    <!-- Grid -->
+    <div class="promo-grid" id="promoGrid">
+      <div class="loading" style="grid-column:1/-1">
+        <div class="spinner"></div>
+        <div class="loading-text">正在載入促銷資料…</div>
+      </div>
+    </div>
+    <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+      <button class="btn-lm" id="loadMoreBtn" onclick="loadMore()">載入更多優惠 ↓</button>
+    </div>
+  </div>
+</section>
+
+<!-- Airlines Section -->
+<section class="section section-alt" id="airlines">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">航空公司情報</div>
+      <h2 class="section-title">監控中的航空公司</h2>
+      <p class="section-subtitle">即時追蹤各大航空公司官網促銷頁，第一時間抓取最新優惠</p>
+    </div>
+    <div class="al-tabs">
+      <button class="al-tab active" onclick="switchAlTab(this,'all')">全部</button>
+      <button class="al-tab" onclick="switchAlTab(this,'domestic')">台灣本籍</button>
+      <button class="al-tab" onclick="switchAlTab(this,'lcc')">亞洲廉航</button>
+    </div>
+    <div class="airline-grid" id="airlineGrid"></div>
+  </div>
+</section>
+
+<!-- Radar Section -->
+<section class="section" id="radar">
+  <div class="container">
+    <div class="radar-section">
+      <div>
+        <div class="radar-badge">🛰 搶票雷達系統</div>
+        <h2 class="radar-title">設定一次<br>永遠不再錯過特惠</h2>
+        <p class="radar-desc">選擇目的地與預算，當符合條件的限時促銷上線，即刻推播到你的手機，直附官方訂票連結。</p>
+        <div class="radar-channels">
+          <button class="ch-btn ch-line" onclick="openRadar()">💬 LINE 推播</button>
+          <button class="ch-btn ch-tg" onclick="openRadar()">✈ Telegram</button>
+          <button class="ch-btn ch-em" onclick="openRadar()">📧 Email</button>
+        </div>
+      </div>
+      <div class="radar-prefs">
+        <div class="rp-title">快速設定偏好</div>
+        <div class="pref-group">
+          <div class="pref-label">目的地</div>
+          <div class="pref-chips">
+            <button class="pref-chip sel" onclick="this.classList.toggle('sel')">日本</button>
+            <button class="pref-chip sel" onclick="this.classList.toggle('sel')">中國大陸</button>
+            <button class="pref-chip" onclick="this.classList.toggle('sel')">東南亞</button>
+            <button class="pref-chip" onclick="this.classList.toggle('sel')">歐洲</button>
+            <button class="pref-chip" onclick="this.classList.toggle('sel')">美洲</button>
+          </div>
+        </div>
+        <div class="pref-group">
+          <div class="pref-label">航空類型</div>
+          <div class="pref-chips">
+            <button class="pref-chip sel" onclick="this.classList.toggle('sel')">廉航</button>
+            <button class="pref-chip sel" onclick="this.classList.toggle('sel')">傳統航空</button>
+          </div>
+        </div>
+        <div class="pref-group">
+          <div class="pref-label">最高票價（TWD 未稅）</div>
+          <input class="pref-input" type="number" placeholder="例：5000（0 表示不限）" min="0" step="500">
+        </div>
+        <button class="btn-subscribe" onclick="subscribe()">🔔 立即訂閱（免費）</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <a href="#" class="nav-logo"><div class="plane">✈</div>飛出<span>台灣</span></a>
+      <p class="footer-desc">聚合台灣起飛 8 家航空公司限時促銷的情報平台，每 15 分鐘自動更新，直達官方訂票頁。</p>
+      <div class="footer-social">
+        <a href="#" class="social-btn">f</a>
+        <a href="#" class="social-btn">in</a>
+        <a href="#" class="social-btn">L</a>
+        <a href="#" class="social-btn">✈</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>熱門航線</h4>
+      <ul class="footer-links">
+        <li><a href="#">台北 → 東京</a></li>
+        <li><a href="#">台北 → 大阪</a></li>
+        <li><a href="#">台北 → 首爾</a></li>
+        <li><a href="#">台北 → 上海</a></li>
+        <li><a href="#">台北 → 曼谷</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>航空公司</h4>
+      <ul class="footer-links">
+        <li><a href="#">台灣虎航</a></li>
+        <li><a href="#">長榮航空</a></li>
+        <li><a href="#">中華航空</a></li>
+        <li><a href="#">星宇航空</a></li>
+        <li><a href="#">樂桃 · 酷航 · 亞航</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>關於</h4>
+      <ul class="footer-links">
+        <li><a href="#">關於我們</a></li>
+        <li><a href="#">廣告合作</a></li>
+        <li><a href="#">隱私政策</a></li>
+        <li><a href="#">服務條款</a></li>
+        <li><a href="#">聯絡我們</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 飛出台灣 FlyFromTaiwan</span>
+    <span class="footer-disclaimer">票價資訊僅供參考，以各航空公司官方網站為準。促銷活動可能提前結束或售完，請確認後盡速至官網完成購買。</span>
+  </div>
+</footer>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<div class="modal-overlay" id="radarModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🔔 開啟搶票雷達</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <p style="font-size:.88rem;color:var(--g400);line-height:1.6;margin-bottom:1.5rem">選擇推播管道，促銷一出現立即通知你！</p>
+    <div style="display:flex;flex-direction:column;gap:.75rem">
+      <button class="ch-btn ch-line" style="justify-content:center;padding:14px" onclick="confirmRadar('LINE')">💬 加入 LINE 官方帳號</button>
+      <button class="ch-btn ch-tg" style="justify-content:center;padding:14px" onclick="confirmRadar('Telegram')">✈ 加入 Telegram 頻道</button>
+      <button class="ch-btn ch-em" style="justify-content:center;padding:14px" onclick="confirmRadar('Email')">📧 Email 訂閱</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Destination visuals ─────────────────────────────────────
+
+const BOOKING_MAP = {"IT": "https://booking.tigerairtw.com/", "BR": "https://booking.evaair.com/flyeva/eva/b2c/booking-online.aspx?lang=zh-tw", "CI": "https://www.china-airlines.com/tw/zh/booking/book-flights/flight-search", "JX": "https://www.starlux-airlines.com/zh-TW/booking/book-flight/search-a-flight", "MM": "https://www.flypeach.com/tw/ap/book", "TR": "https://flights.flyscoot.com/en/flights-from-taiwan-china", "AK": "https://www.airasia.com/zh/tw/book-with-us/fly.page", "3K": "https://www.jetstar.com/tw/zh/home"};
+const PROMO_MAP = {"IT": "https://www.tigerairtw.com/zh-TW/", "BR": "https://www.evaair.com/zh-tw/promotions/", "CI": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "JX": "https://www.starlux-airlines.com/zh-TW/promotions", "MM": "https://www.flypeach.com/en/otherbnr", "TR": "https://www.flyscoot.com/en", "AK": "https://www.airasia.com/en/gb", "3K": "https://www.jetstar.com/tw/zh/home"};
+const DEST_IMG = {
+  NRT:'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&q=70',
+  HND:'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&q=70',
+  KIX:'https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?w=400&q=70',
+  FUK:'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=400&q=70',
+  OKA:'https://images.unsplash.com/photo-1590253230532-a67f6bc61b9e?w=400&q=70',
+  CTS:'https://images.unsplash.com/photo-1578170607595-63db4a1aef29?w=400&q=70',
+  NGO:'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=400&q=70',
+  ICN:'https://images.unsplash.com/photo-1538484408765-1c9ee9b25be5?w=400&q=70',
+  GMP:'https://images.unsplash.com/photo-1538484408765-1c9ee9b25be5?w=400&q=70',
+  PUS:'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=400&q=70',
+  PVG:'https://images.unsplash.com/photo-1474181487882-5abf3f0ba6c2?w=400&q=70',
+  SHA:'https://images.unsplash.com/photo-1474181487882-5abf3f0ba6c2?w=400&q=70',
+  PEK:'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=400&q=70',
+  PKX:'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=400&q=70',
+  CAN:'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&q=70',
+  CTU:'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&q=70',
+  XMN:'https://images.unsplash.com/photo-1621681516490-c80e28ab74e8?w=400&q=70',
+  HGH:'https://images.unsplash.com/photo-1568797629192-789acf8e4df3?w=400&q=70',
+  SZX:'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=400&q=70',
+  WUH:'https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?w=400&q=70',
+  CKG:'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&q=70',
+  BKK:'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=400&q=70',
+  DMK:'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=400&q=70',
+  HKT:'https://images.unsplash.com/photo-1537956965359-7573183d1f57?w=400&q=70',
+  SIN:'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=400&q=70',
+  KUL:'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&q=70',
+  DPS:'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400&q=70',
+  MNL:'https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?w=400&q=70',
+  SGN:'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=400&q=70',
+  HAN:'https://images.unsplash.com/photo-1557750255-c76072a7aad1?w=400&q=70',
+  DAD:'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=400&q=70',
+  CGK:'https://images.unsplash.com/photo-1555899434-94d1368aa7af?w=400&q=70',
+  LHR:'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=400&q=70',
+  CDG:'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400&q=70',
+  AMS:'https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=400&q=70',
+  FRA:'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=400&q=70',
+  VIE:'https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=400&q=70',
+  LAX:'https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=400&q=70',
+  SFO:'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=400&q=70',
+  JFK:'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=400&q=70',
+  YVR:'https://images.unsplash.com/photo-1560814304-4f05b62af116?w=400&q=70',
+  YYZ:'https://images.unsplash.com/photo-1517935706615-2717063c2225?w=400&q=70',
+  SYD:'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=400&q=70',
+  MEL:'https://images.unsplash.com/photo-1514395462725-fb4566210144?w=400&q=70',
+}
+const DEST_FLAGS = {
+  NRT:'🇯🇵',HND:'🇯🇵',KIX:'🇯🇵',FUK:'🇯🇵',OKA:'🇯🇵',CTS:'🇯🇵',NGO:'🇯🇵',
+  ICN:'🇰🇷',GMP:'🇰🇷',PUS:'🇰🇷',
+  PVG:'🇨🇳',SHA:'🇨🇳',PEK:'🇨🇳',PKX:'🇨🇳',CAN:'🇨🇳',CTU:'🇨🇳',XMN:'🇨🇳',HGH:'🇨🇳',SZX:'🇨🇳',WUH:'🇨🇳',CKG:'🇨🇳',
+  BKK:'🇹🇭',DMK:'🇹🇭',HKT:'🇹🇭',
+  SIN:'🇸🇬',KUL:'🇲🇾',DPS:'🇮🇩',CGK:'🇮🇩',MNL:'🇵🇭',SGN:'🇻🇳',HAN:'🇻🇳',DAD:'🇻🇳',
+  LHR:'🇬🇧',CDG:'🇫🇷',AMS:'🇳🇱',FRA:'🇩🇪',VIE:'🇦🇹',
+  LAX:'🇺🇸',SFO:'🇺🇸',JFK:'🇺🇸',YVR:'🇨🇦',YYZ:'🇨🇦',
+  SYD:'🇦🇺',MEL:'🇦🇺',
+}
+const AL_COLORS = {
+  IT:'linear-gradient(135deg,#c2410c,#ea580c)',
+  BR:'linear-gradient(135deg,#065f46,#047857)',
+  CI:'linear-gradient(135deg,#1e3a8a,#1d4ed8)',
+  JX:'linear-gradient(135deg,#7c3aed,#6d28d9)',
+  MM:'linear-gradient(135deg,#b91c1c,#dc2626)',
+  TR:'linear-gradient(135deg,#0369a1,#0284c7)',
+  AK:'linear-gradient(135deg,#d97706,#f59e0b)',
+  '3K':'linear-gradient(135deg,#065f46,#059669)',
+}
+const AL_EMOJI = {IT:'🐯',BR:'🍀',CI:'🌸',JX:'⭐',MM:'🎌',TR:'🇰🇷',AK:'🌴','3K':'🦘'}
+const AL_DATA = [
+  {code:'IT',name:'台灣虎航',sub:'Tigerair TW',cat:'domestic',lcc:true},
+  {code:'BR',name:'長榮航空',sub:'EVA Air',cat:'domestic',lcc:false},
+  {code:'CI',name:'中華航空',sub:'China Airlines',cat:'domestic',lcc:false},
+  {code:'JX',name:'星宇航空',sub:'STARLUX',cat:'domestic',lcc:false},
+  {code:'MM',name:'樂桃航空',sub:'Peach Aviation',cat:'lcc',lcc:true},
+  {code:'TR',name:'酷航',sub:'Scoot',cat:'lcc',lcc:true},
+  {code:'AK',name:'亞洲航空',sub:'AirAsia',cat:'lcc',lcc:true},
+  {code:'3K',name:'捷星亞洲',sub:'Jetstar Asia',cat:'lcc',lcc:true},
+]
+
+// ─── State ───────────────────────────────────────────────────
+let allDeals = []
+let filtered = []
+let displayed = 0
+const PAGE_SIZE = 12
+let state = { region:'all', type:'all', airline:'', sort:'urgent' }
+
+// ─── Load JSON ───────────────────────────────────────────────
+async function loadDeals() {
+  // 優先抓最新的 deals.json（透過 server.py 開啟時）；失敗才用內嵌備援資料（直接雙擊開啟時）
+  try {
+    const r = await fetch('deals.json?' + Date.now())
+    if (!r.ok) throw new Error('fetch failed')
+    const data = await r.json()
+    allDeals = data.deals || []
+    initPage(data.stats)
+  } catch(e) {
+    if (window.__DEALS__) {
+      allDeals = window.__DEALS__.deals || []
+      initPage(window.__DEALS__.stats)
+    } else {
+      document.getElementById('promoGrid').innerHTML =
+        '<div class="empty-state" style="grid-column:1/-1"><div class="ei">⚠️</div><div>資料載入失敗，請重新整理頁面</div></div>'
+    }
+  }
+}
+
+// ─── 最低價快報（讀 monitor.py 產生的 price_report.txt）─────────
+async function loadReport() {
+  const box = document.getElementById('reportBox')
+  if (!box) return
+  try {
+    const r = await fetch('price_report.txt?' + Date.now())
+    if (!r.ok) throw new Error('no report')
+    const txt = (await r.text()).trim()
+    box.textContent = txt || '尚無快報資料。等排程跑過一次後就會顯示。'
+  } catch(e) {
+    box.textContent = '尚無快報資料。等排程（08:00 / 20:00）跑過一次後就會顯示。'
+  }
+}
+
+function initPage(stats) {
+  // Stats
+  document.getElementById('hs-total').textContent = stats.total
+  document.getElementById('st-total').textContent = stats.total
+
+  // Region counts
+  const reg = stats.by_region || {}
+  const total = stats.total || 0
+  document.getElementById('cnt-all').textContent = total
+  Object.entries(reg).forEach(([k,v]) => {
+    const el = document.getElementById('cnt-'+k)
+    if(el) el.textContent = v
+  })
+
+  // Airline select
+  const sel = document.getElementById('airlineSelect')
+  AL_DATA.forEach(a => {
+    const opt = document.createElement('option')
+    opt.value = a.code
+    opt.textContent = `${AL_EMOJI[a.code]||''} ${a.name}`
+    sel.appendChild(opt)
+  })
+
+  // Airline grid
+  renderAirlineGrid(stats.by_airline || {})
+
+  // Ticker
+  renderTicker()
+
+  // Hero card：全站最低價
+  const cheapest = [...allDeals].sort((a,b) => a.price-b.price)[0]
+  if(cheapest) renderHeroCard(cheapest)
+
+  // Initial render
+  applyFilters()
+
+  // Demo toasts
+  setTimeout(() => {
+    const newest = allDeals[0]
+    if(newest) showToast('🔥','新促銷上線！',`${newest.airline} ${newest.origin_name}→${newest.destination_name} $${newest.price.toLocaleString()} 起`,6000)
+  }, 3000)
+}
+
+// ─── Filters ─────────────────────────────────────────────────
+function setRegion(btn, region) {
+  state.region = region
+  document.querySelectorAll('.region-tab').forEach(b => b.classList.remove('active'))
+  btn.classList.add('active')
+  displayed = 0
+  applyFilters()
+}
+function setType(btn, type) {
+  state.type = state.type === type && type !== 'all' ? 'all' : type
+  document.querySelectorAll('#typeAll,#typeLcc,#typeFull').forEach(b => { b.classList.remove('active','ao') })
+  if(state.type === 'lcc') btn.classList.add('ao')
+  else if(state.type === 'full') btn.classList.add('ao')
+  else document.getElementById('typeAll').classList.add('active')
+  displayed = 0
+  applyFilters()
+}
+function applyFilters() {
+  state.airline = document.getElementById('airlineSelect').value
+  state.sort = document.getElementById('sortSelect').value
+
+  filtered = allDeals.filter(d => {
+    const rOk = state.region === 'all' || d.region === state.region
+    const tOk = state.type === 'all' ||
+      (state.type === 'lcc' && d.is_lcc) ||
+      (state.type === 'full' && !d.is_lcc)
+    const aOk = !state.airline || d.airline_code === state.airline
+    return rOk && tOk && aOk
+  })
+
+  // Sort
+  if(state.sort === 'urgent') filtered.sort((a,b) => (a.hours_remaining||9999)-(b.hours_remaining||9999))
+  else if(state.sort === 'discount') filtered.sort((a,b) => (b.discount_pct||0)-(a.discount_pct||0))
+  else if(state.sort === 'price_asc') filtered.sort((a,b) => a.price-b.price)
+  else if(state.sort === 'hot') filtered.sort((a,b) => (b.clicks||0)-(a.clicks||0))
+  else filtered.sort((a,b) => new Date(b.scraped_at)-new Date(a.scraped_at))
+
+  displayed = 0
+  renderGrid(true)
+}
+
+// ─── Render Grid ──────────────────────────────────────────────
+function renderGrid(reset=false) {
+  const grid = document.getElementById('promoGrid')
+  if(reset) grid.innerHTML = ''
+  if(filtered.length === 0) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="ei">🔍</div><div>目前沒有符合條件的促銷，請調整篩選條件</div></div>'
+    document.getElementById('loadMoreWrap').style.display = 'none'
+    document.getElementById('resultsCount').textContent = '0 筆'
+    return
+  }
+
+  const slice = filtered.slice(displayed, displayed + PAGE_SIZE)
+  slice.forEach(d => {
+    grid.insertAdjacentHTML('beforeend', makeCard(d))
+  })
+  displayed += slice.length
+
+  document.getElementById('resultsCount').textContent = `共 ${filtered.length} 筆`
+  const lmw = document.getElementById('loadMoreWrap')
+  if(displayed < filtered.length) {
+    lmw.style.display = 'block'
+    document.getElementById('loadMoreBtn').textContent = `載入更多（還有 ${filtered.length - displayed} 筆）↓`
+    document.getElementById('loadMoreBtn').disabled = false
+  } else {
+    lmw.style.display = displayed > PAGE_SIZE ? 'block' : 'none'
+    if(displayed > PAGE_SIZE) document.getElementById('loadMoreBtn').textContent = '已顯示全部優惠 ✓'
+  }
+}
+function loadMore() {
+  renderGrid(false)
+}
+
+function makeCard(d) {
+  const img = DEST_IMG[d.destination] || `https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&q=70`
+  const flag = DEST_FLAGS[d.destination] || '🌍'
+  const destName = d.destination_name || d.destination
+  const isUrgent = (d.hours_remaining||9999) < 24
+  const isNew = (d.hours_remaining||9999) > 160
+  const alTag = d.is_lcc ? '<span class="lcc-tag">廉航</span>' : '<span class="trad-tag">傳統航空</span>'
+  const ribbon = isUrgent ? '<div class="ribbon">🔥 限時24H</div>' : ''
+  const newBadge = isNew ? '<div class="new-badge">NEW</div>' : ''
+  const alEmoji = AL_EMOJI[d.airline_code] || '✈'
+  const discBadge = d.discount_pct ? `<span class="disc-badge" style="margin-left:auto">-${d.discount_pct}%</span>` : ''
+  const bustBadge = d.price < 1500 ? '<span class="badge-bust">破盤</span>' : (d.price < 2500 ? '<span class="badge-deal">超值</span>' : '')
+  const taxPrice = d.price_with_tax ? `含稅約 <span>$${d.price_with_tax.toLocaleString()}</span> · 來回` : ''
+
+  return `
+  <div class="promo-card${isUrgent?' urgent':''}" data-id="${d.id}">
+    <div class="card-img">
+      <div class="bg" style="background:url('${img}') center/cover,linear-gradient(135deg,#1a3a6b,#0B1426)"></div>
+      <div class="ov"></div>
+      <div class="dest-n">${destName} ${flag}</div>
+      <div class="dest-c">${d.origin_name||'台北'} → ${destName}</div>
+      ${ribbon}${newBadge}
+    </div>
+    <div class="card-body">
+      <div class="card-airline-row">
+        <span class="card-al-name">${alEmoji} ${d.airline}</span>
+        ${alTag}
+      </div>
+      <div class="price-row2">
+        <div class="card-price">$${d.price.toLocaleString()}${bustBadge}</div>
+        <div class="card-price-unit">TWD起</div>
+        ${discBadge}
+      </div>
+      ${taxPrice ? `<div class="card-price-tax">${taxPrice}</div>` : ''}
+      <div class="card-cdown">⏰ 距截止 <span class="t" data-hours="${d.hours_remaining||0}" data-id="${d.id}">計算中</span></div>
+      <div class="card-footer">
+        <div class="hot-cnt">🔥 ${(d.clicks||0).toLocaleString()} 人點擊</div>
+        <a href="${d.booking_url}" target="_blank" rel="noopener" class="btn-go" onclick="countClick(${d.id})">🎫 查看此優惠</a>
+      </div>
+    </div>
+  </div>`
+}
+
+// ─── Hero Card ────────────────────────────────────────────────
+function renderHeroCard(d) {
+  const img = DEST_IMG[d.destination] || ''
+  const flag = DEST_FLAGS[d.destination] || '🌍'
+  const destName = d.destination_name || d.destination
+  const alTag = d.is_lcc ? '<span class="lcc-tag">廉航</span>' : '<span class="trad-tag">傳統航空</span>'
+  const alEmoji = AL_EMOJI[d.airline_code] || '✈'
+  const alColor = AL_COLORS[d.airline_code] || 'linear-gradient(135deg,#1a3a6b,#2563eb)'
+
+  document.getElementById('heroDeal').innerHTML = `
+    <div class="hd-header">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="al-logo" style="background:${alColor}">${alEmoji}</div>
+        <div>
+          <div style="font-size:.9rem;font-weight:700">${d.airline}</div>
+          <div style="font-size:.72rem;color:var(--g400)">${d.airline_code}</div>
+        </div>
+      </div>
+      ${alTag}
+    </div>
+    <div style="display:inline-flex;align-items:center;gap:6px;margin:0 0 .75rem;padding:4px 12px;background:linear-gradient(135deg,rgba(255,107,53,.18),rgba(255,107,53,.08));border:1px solid rgba(255,107,53,.35);border-radius:100px;font-size:.74rem;font-weight:700;color:var(--orange-l)">👑 全站最低價</div>
+    <div class="route">
+      <div style="text-align:center"><div class="city-code">TPE</div><div class="city-name">台北</div></div>
+      <div class="fl-line">
+        <div class="fl-dots"><span>✈</span></div>
+        <div style="font-size:.68rem;color:var(--g400)">直飛</div>
+      </div>
+      <div style="text-align:center"><div class="city-code">${d.destination}</div><div class="city-name">${destName} ${flag}</div></div>
+    </div>
+    <div class="price-row">
+      <div>
+        <div class="price-main">$${d.price.toLocaleString()}</div>
+        <div style="font-size:.8rem;color:var(--g400)">含稅約 <strong style="color:var(--orange)">$${(d.price_with_tax||d.price*2.2|0).toLocaleString()}</strong></div>
+      </div>
+      <div style="font-size:.9rem;color:var(--g400);line-height:2">TWD 起</div>
+      ${d.discount_pct?`<div class="disc-badge">-${d.discount_pct}%</div>`:''}
+    </div>
+    <div class="card-meta">
+      <div class="meta-item">🌏 目的地<strong>${destName}</strong></div>
+      <div class="meta-item">🎫 含稅估算<strong>$${(d.price_with_tax||0).toLocaleString()} TWD</strong></div>
+      <div class="meta-item">🔥 今日點擊<strong>${(d.clicks||0).toLocaleString()} 人</strong></div>
+      <div class="meta-item">✈ 航空公司<strong>${d.airline}</strong></div>
+    </div>
+    <div class="cdown-bar">
+      <span class="cdown-lbl">⏰ 距離促銷截止</span>
+      <span class="cdown-digits" id="heroCD" data-hours="${d.hours_remaining||0}">--:--:--</span>
+    </div>
+    <div class="card-actions">
+      <a href="${d.booking_url}" target="_blank" rel="noopener" class="btn-book" onclick="countClick(${d.id})">🎫 直達此優惠方案 ↗</a>
+      <button class="btn-save" onclick="saveItem(this)">🔖 加入追蹤</button>
+    </div>
+    <div class="hot-ind"><span class="hot-dot"></span>今日已有 <strong style="color:var(--orange);margin:0 4px">${(d.clicks||0).toLocaleString()}</strong> 人點擊此促銷</div>
+  `
+}
+
+// ─── Airline Grid ─────────────────────────────────────────────
+function renderAirlineGrid(byAirline) {
+  const grid = document.getElementById('airlineGrid')
+  grid.innerHTML = ''
+  AL_DATA.forEach(a => {
+    const cnt = byAirline[a.name] || 0
+    grid.insertAdjacentHTML('beforeend', `
+      <div class="airline-card" data-cat="${a.cat}">
+        <div class="al-icon" style="background:${AL_COLORS[a.code]||'#1a3a6b'}">${AL_EMOJI[a.code]||'✈'}</div>
+        <div class="al-card-name">${a.name}</div>
+        <div class="al-card-sub">${a.sub} · ${a.code}</div>
+        <div class="al-deals" style="cursor:pointer" onclick="filterByAirline('${a.code}')">${cnt} 個促銷 →篩選</div>
+        <a href="${BOOKING_MAP[a.code]||'#'}" target="_blank" rel="noopener" style="font-size:.72rem;color:var(--blue-g);margin-top:.25rem;text-decoration:none" onclick="event.stopPropagation()">前往官網訂票 ↗</a>
+      </div>
+    `)
+  })
+}
+function filterByAirline(code) {
+  document.getElementById('airlineSelect').value = code
+  document.getElementById('deals').scrollIntoView({behavior:'smooth'})
+  applyFilters()
+  showToast('🔍','篩選中',`顯示 ${AL_DATA.find(a=>a.code===code)?.name||code} 促銷`)
+}
+function switchAlTab(btn, cat) {
+  document.querySelectorAll('.al-tab').forEach(b => b.classList.remove('active'))
+  btn.classList.add('active')
+  document.querySelectorAll('.airline-card').forEach(c => {
+    c.style.display = (cat==='all'||c.dataset.cat===cat) ? '' : 'none'
+  })
+}
+
+// ─── Ticker ───────────────────────────────────────────────────
+function renderTicker() {
+  const top15 = [...allDeals].sort((a,b)=>(b.clicks||0)-(a.clicks||0)).slice(0,15)
+  const mkItem = d => `<div class="ticker-item">${AL_EMOJI[d.airline_code]||'✈'} ${d.airline} 台北→${d.destination_name||d.destination} <span class="tp">$${d.price.toLocaleString()}</span> 起</div><div class="ticker-sep">·</div>`
+  const html = top15.map(mkItem).join('') + top15.map(mkItem).join('') // duplicate for seamless loop
+  document.getElementById('tickerInner').innerHTML = html
+}
+
+// ─── Countdown ────────────────────────────────────────────────
+const startTs = Date.now()
+function formatTime(ms) {
+  if(ms<=0) return '已截止'
+  const s=Math.floor(ms/1000)
+  const h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sec=s%60
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`
+}
+function updateCountdowns() {
+  const now=Date.now(), elapsed=(now-startTs)
+  document.querySelectorAll('[data-hours]').forEach(el=>{
+    const ms = parseInt(el.dataset.hours||0)*3600000 - elapsed
+    el.textContent = formatTime(ms)
+    if(ms<3600000) el.style.color='var(--red)'
+  })
+}
+setInterval(updateCountdowns, 1000)
+updateCountdowns()
+
+// ─── Navbar ───────────────────────────────────────────────────
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',scrollY>20))
+const hamburger=document.getElementById('hamburger'), mobileMenu=document.getElementById('mobileMenu')
+hamburger.addEventListener('click',()=>{
+  mobileMenu.classList.toggle('open')
+  const ss=hamburger.querySelectorAll('span')
+  if(mobileMenu.classList.contains('open')){
+    ss[0].style.transform='rotate(45deg) translate(5px,5px)';ss[1].style.opacity='0';ss[2].style.transform='rotate(-45deg) translate(5px,-5px)'
+  }else ss.forEach(s=>{s.style.transform='';s.style.opacity=''})
+})
+mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+  mobileMenu.classList.remove('open')
+  hamburger.querySelectorAll('span').forEach(s=>{s.style.transform='';s.style.opacity=''})
+}))
+
+// ─── Particles ────────────────────────────────────────────────
+;(()=>{
+  const w=document.getElementById('particles')
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div'); p.className='particle'
+    const sz=Math.random()*60+10
+    p.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;animation-duration:${Math.random()*15+8}s;animation-delay:${Math.random()*10}s`
+    w.appendChild(p)
+  }
+})()
+
+// ─── Toast ────────────────────────────────────────────────────
+function showToast(icon,title,msg,dur=4000){
+  const w=document.getElementById('toastWrap')
+  const t=document.createElement('div');t.className='toast'
+  t.innerHTML=`<div class="toast-icon">${icon}</div><div class="toast-text"><strong>${title}</strong><span>${msg}</span></div><button class="toast-close" onclick="this.parentElement.remove()">✕</button>`
+  w.appendChild(t)
+  setTimeout(()=>{t.style.transition='all .3s ease';t.style.opacity='0';t.style.transform='translateX(120%)';setTimeout(()=>t.remove(),300)},dur)
+}
+
+// ─── Track / Save ─────────────────────────────────────────────
+
+// ─── Bargain Board ────────────────────────────────────
+function renderBargainBoard(deals) {
+  const top5 = [...deals].sort((a,b)=>a.price-b.price).slice(0,5)
+  const list = document.getElementById('bargainList')
+  if(!list) return
+  const DEST_NAME = {
+    NRT:'東京成田',HND:'東京羽田',KIX:'大阪',OKA:'沖繩',FUK:'福岡',CTS:'北海道',
+    ICN:'首爾',PUS:'釜山',HKG:'香港',BKK:'曼谷',CNX:'清邁',HKT:'普吉',
+    SIN:'新加坡',DPS:'峇里島',KUL:'吉隆坡',SGN:'胡志明',HAN:'河內',DAD:'峴港',
+    MNL:'馬尼拉',CEB:'宿霧',PVG:'上海',PEK:'北京',CAN:'廣州',XMN:'廈門',
+    CTU:'成都',KMG:'昆明',CKG:'重慶',
+    LHR:'倫敦',CDG:'巴黎',AMS:'阿姆斯特丹',
+    LAX:'洛杉磯',JFK:'紐約',SFO:'舊金山',
+    SYD:'雪梨',MEL:'墨爾本',AKL:'奧克蘭'
+  }
+  list.innerHTML = top5.map((d,i)=>{
+    const rank = i+1
+    const destN = DEST_NAME[d.destination]||d.destination
+    const rankCls = rank<=3 ? 'top3' : ''
+    const rankIcon = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':`#${rank}`
+    return `<div class="bargain-item" onclick="window.open('${d.booking_url}','_blank')">
+      <div class="bargain-rank ${rankCls}">${rankIcon}</div>
+      <div class="bargain-dest">${destN}</div>
+      <div class="bargain-al">${d.airline}</div>
+      <div class="bargain-price">$${d.price.toLocaleString()}<span>TWD起</span></div>
+      ${d.discount_pct?`<div class="bargain-disc">比原價省 ${d.discount_pct}%</div>`:''}
+    </div>`
+  }).join('')
+}
+
+function countClick(id){
+  // 純計數，不干擾 href 導航
+  const d=allDeals.find(x=>x.id===id)
+  if(d) d.clicks=(d.clicks||0)+1
+}
+function trackClick(e,label,id){ countClick(id) } // 向後相容
+function saveItem(btn){
+  btn.textContent='✅ 已追蹤';btn.style.color='var(--green)';btn.style.borderColor='rgba(16,185,129,.4)'
+  showToast('🔖','加入追蹤','票價截止前會提醒你')
+}
+
+// ─── Radar ────────────────────────────────────────────────────
+function openRadar(){document.getElementById('radarModal').classList.add('open')}
+function closeModal(){document.getElementById('radarModal').classList.remove('open')}
+document.getElementById('radarModal').addEventListener('click',function(e){if(e.target===this)closeModal()})
+function confirmRadar(ch){closeModal();showToast('🔔','雷達已開啟！',`將透過 ${ch} 推播符合條件的促銷`)}
+function subscribe(){
+  const sel=[...document.querySelectorAll('.pref-chip.sel')].map(c=>c.textContent)
+  if(!sel.length){showToast('⚠️','請選擇目的地','');return}
+  showToast('🎉','偏好已儲存','請選擇推播管道')
+  setTimeout(()=>document.getElementById('radarModal').classList.add('open'),800)
+}
+
+
+// ─── Inline Data (no server needed) ─────────────────────
+window.__DEALS__ = {"stats": {"total": 76, "by_region": {"northeast_asia": 23, "southeast_asia": 26, "china": 9, "oceania": 4, "europe": 6, "americas": 8}, "by_airline": {"台灣虎航": 10, "樂桃航空": 7, "酷航": 8, "亞洲航空": 10, "捷星亞洲": 6, "長榮航空": 11, "中華航空": 15, "星宇航空": 9}, "last_updated": "2026-06-09T04:34:53.697464", "data_note": "票價為市場行情參考，點擊後直達各航空公司官方訂票頁，請以官網顯示為準"}, "deals": [{"id": 1, "airline": "台灣虎航", "airline_code": "IT", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "KIX", "destination_name": "大阪關西", "region": "northeast_asia", "price": 1499, "currency": "TWD", "price_with_tax": 3897, "discount_pct": 64, "title": "台灣虎航 台北 → 大阪關西 限時特惠", "booking_url": "https://booking.tigerairtw.com/?origin=TPE&destination=KIX", "promo_page": "https://www.tigerairtw.com/zh-TW/event", "hours_remaining": 14, "expires_at": "2026-06-09T18:34:53.697464", "clicks": 1247, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 2, "airline": "台灣虎航", "airline_code": "IT", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "NRT", "destination_name": "東京成田", "region": "northeast_asia", "price": 1799, "currency": "TWD", "price_with_tax": 4677, "discount_pct": 58, "title": "台灣虎航 台北 → 東京成田 限時特惠", "booking_url": "https://booking.tigerairtw.com/?origin=TPE&destination=NRT", "promo_page": "https://www.tigerairtw.com/zh-TW/event", "hours_remaining": 22, "expires_at": "2026-06-10T02:34:53.697464", "clicks": 987, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 3, "airline": "台灣虎航", "airline_code": "IT", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "OKA", "destination_name": "沖繩", "region": "northeast_asia", "price": 1299, "currency": "TWD", "price_with_tax": 3377, "discount_pct": 55, "title": "台灣虎航 台北 → 沖繩 限時特惠", "booking_url": "https://booking.tigerairtw.com/?origin=TPE&destination=OKA", "promo_page": "https://www.tigerairtw.com/zh-TW/event", "hours_remaining": 8, "expires_at": "2026-06-09T12:34:53.697464", "clicks": 1149, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 4, "airline": "台灣虎航", "airline_code": "IT", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "FUK", "destination_name": "福岡", "region": "northeast_asia", "price": 1599, "currency": "TWD", "price_with_tax": 4157, "discount_pct": 52, "title": "台灣虎航 台北 → 福岡 限時特惠", "booking_url": "https://booking.tigerairtw.com/?origin=TPE&destination=FUK", "promo_page": "https://www.tigerairtw.com/zh-TW/event", "hours_remaining": 36, "expires_at": "2026-06-10T16:34:53.697464", "clicks": 654, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 5, "airline": "台灣虎航", "airline_code": "IT", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "CTS", "destination_name": "札幌新千歲", "region": "northeast_asia", "price": 2299, "currency": "TWD", "price_with_tax": 5977, "discount_pct": 45, "title": "台灣虎航 台北 → 札幌新千歲 限時特惠", "booking_url": "https://booking.tigerairtw.com/?origin=TPE&destination=CTS", "promo_page": "https://www.tigerairtw.com/zh-TW/event", "hours_remaining": 48, "expires_at": "2026-06-11T04:34:53.697464", "clicks": 432, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 6, "airline": "台灣虎航", "airline_code": "IT", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "ICN", "destination_name": "首爾仁川", "region": "northeast_asia", "price": 1699, "currency": "TWD", "price_with_tax": 4417, "discount_pct": 48, "title": "台灣虎航 台北 → 首爾仁川 限時特惠", "booking_url": "https://booking.tigerairtw.com/?origin=TPE&destination=ICN", "promo_page": "https://www.tigerairtw.com/zh-TW/event", "hours_remaining": 72, "expires_at": "2026-06-12T04:34:53.697464", "clicks": 876, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 7, "airline": "台灣虎航", "airline_code": "IT", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "PUS", "destination_name": "釜山", "region": "northeast_asia", "price": 1499, "currency": "TWD", "price_with_tax": 3897, "discount_pct": 51, "title": "台灣虎航 台北 → 釜山 限時特惠", "booking_url": "https://booking.tigerairtw.com/?origin=TPE&destination=PUS", "promo_page": "https://www.tigerairtw.com/zh-TW/event", "hours_remaining": 60, "expires_at": "2026-06-11T16:34:53.697464", "clicks": 543, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 8, "airline": "台灣虎航", "airline_code": "IT", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "BKK", "destination_name": "曼谷素萬那普", "region": "southeast_asia", "price": 1999, "currency": "TWD", "price_with_tax": 5197, "discount_pct": 42, "title": "台灣虎航 台北 → 曼谷素萬那普 限時特惠", "booking_url": "https://booking.tigerairtw.com/?origin=TPE&destination=BKK", "promo_page": "https://www.tigerairtw.com/zh-TW/event", "hours_remaining": 96, "expires_at": "2026-06-13T04:34:53.697464", "clicks": 789, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 9, "airline": "台灣虎航", "airline_code": "IT", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "DMK", "destination_name": "曼谷廊曼", "region": "southeast_asia", "price": 1699, "currency": "TWD", "price_with_tax": 4417, "discount_pct": 50, "title": "台灣虎航 台北 → 曼谷廊曼 限時特惠", "booking_url": "https://booking.tigerairtw.com/?origin=TPE&destination=DMK", "promo_page": "https://www.tigerairtw.com/zh-TW/event", "hours_remaining": 24, "expires_at": "2026-06-10T04:34:53.697464", "clicks": 921, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 10, "airline": "台灣虎航", "airline_code": "IT", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "XMN", "destination_name": "廈門", "region": "china", "price": 2799, "currency": "TWD", "price_with_tax": 7277, "discount_pct": 48, "title": "台灣虎航 台北 → 廈門 限時特惠", "booking_url": "https://booking.tigerairtw.com/?origin=TPE&destination=XMN", "promo_page": "https://www.tigerairtw.com/zh-TW/event", "hours_remaining": 24, "expires_at": "2026-06-10T04:34:53.697464", "clicks": 567, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 11, "airline": "樂桃航空", "airline_code": "MM", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "NRT", "destination_name": "東京成田", "region": "northeast_asia", "price": 2199, "currency": "TWD", "price_with_tax": 5717, "discount_pct": 52, "title": "樂桃航空 台北 → 東京成田 限時特惠", "booking_url": "https://www.flypeach.com/tw/lm/ns/news/special_offer", "promo_page": "https://www.flypeach.com/tw/lm/ns/news/special_offer", "hours_remaining": 38, "expires_at": "2026-06-10T18:34:53.697464", "clicks": 1234, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 12, "airline": "樂桃航空", "airline_code": "MM", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "KIX", "destination_name": "大阪關西", "region": "northeast_asia", "price": 1999, "currency": "TWD", "price_with_tax": 5197, "discount_pct": 55, "title": "樂桃航空 台北 → 大阪關西 限時特惠", "booking_url": "https://www.flypeach.com/tw/lm/ns/news/special_offer", "promo_page": "https://www.flypeach.com/tw/lm/ns/news/special_offer", "hours_remaining": 24, "expires_at": "2026-06-10T04:34:53.697464", "clicks": 876, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 13, "airline": "樂桃航空", "airline_code": "MM", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "FUK", "destination_name": "福岡", "region": "northeast_asia", "price": 1899, "currency": "TWD", "price_with_tax": 4937, "discount_pct": 50, "title": "樂桃航空 台北 → 福岡 限時特惠", "booking_url": "https://www.flypeach.com/tw/lm/ns/news/special_offer", "promo_page": "https://www.flypeach.com/tw/lm/ns/news/special_offer", "hours_remaining": 48, "expires_at": "2026-06-11T04:34:53.697464", "clicks": 654, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 14, "airline": "樂桃航空", "airline_code": "MM", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "OKA", "destination_name": "沖繩", "region": "northeast_asia", "price": 1699, "currency": "TWD", "price_with_tax": 4417, "discount_pct": 48, "title": "樂桃航空 台北 → 沖繩 限時特惠", "booking_url": "https://www.flypeach.com/tw/lm/ns/news/special_offer", "promo_page": "https://www.flypeach.com/tw/lm/ns/news/special_offer", "hours_remaining": 36, "expires_at": "2026-06-10T16:34:53.697464", "clicks": 1087, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 15, "airline": "樂桃航空", "airline_code": "MM", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "CTS", "destination_name": "札幌新千歲", "region": "northeast_asia", "price": 2499, "currency": "TWD", "price_with_tax": 6497, "discount_pct": 42, "title": "樂桃航空 台北 → 札幌新千歲 限時特惠", "booking_url": "https://www.flypeach.com/tw/lm/ns/news/special_offer", "promo_page": "https://www.flypeach.com/tw/lm/ns/news/special_offer", "hours_remaining": 60, "expires_at": "2026-06-11T16:34:53.697464", "clicks": 432, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 16, "airline": "樂桃航空", "airline_code": "MM", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "NGO", "destination_name": "名古屋", "region": "northeast_asia", "price": 1999, "currency": "TWD", "price_with_tax": 5197, "discount_pct": 46, "title": "樂桃航空 台北 → 名古屋 限時特惠", "booking_url": "https://www.flypeach.com/tw/lm/ns/news/special_offer", "promo_page": "https://www.flypeach.com/tw/lm/ns/news/special_offer", "hours_remaining": 72, "expires_at": "2026-06-12T04:34:53.697464", "clicks": 321, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 17, "airline": "樂桃航空", "airline_code": "MM", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "ICN", "destination_name": "首爾仁川", "region": "northeast_asia", "price": 1899, "currency": "TWD", "price_with_tax": 4937, "discount_pct": 44, "title": "樂桃航空 台北 → 首爾仁川 限時特惠", "booking_url": "https://www.flypeach.com/tw/lm/ns/news/special_offer", "promo_page": "https://www.flypeach.com/tw/lm/ns/news/special_offer", "hours_remaining": 96, "expires_at": "2026-06-13T04:34:53.697464", "clicks": 543, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 18, "airline": "酷航", "airline_code": "TR", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "ICN", "destination_name": "首爾仁川", "region": "northeast_asia", "price": 1699, "currency": "TWD", "price_with_tax": 4417, "discount_pct": 48, "title": "酷航 台北 → 首爾仁川 限時特惠", "booking_url": "https://flights.flyscoot.com/en/book?fromAirportCode=TPE&toAirportCode=ICN", "promo_page": "https://www.flyscoot.com/en/deals", "hours_remaining": 72, "expires_at": "2026-06-12T04:34:53.697464", "clicks": 678, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 19, "airline": "酷航", "airline_code": "TR", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "SIN", "destination_name": "新加坡", "region": "southeast_asia", "price": 1899, "currency": "TWD", "price_with_tax": 4937, "discount_pct": 45, "title": "酷航 台北 → 新加坡 限時特惠", "booking_url": "https://flights.flyscoot.com/en/book?fromAirportCode=TPE&toAirportCode=SIN", "promo_page": "https://www.flyscoot.com/en/deals", "hours_remaining": 48, "expires_at": "2026-06-11T04:34:53.697464", "clicks": 543, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 20, "airline": "酷航", "airline_code": "TR", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "BKK", "destination_name": "曼谷素萬那普", "region": "southeast_asia", "price": 1599, "currency": "TWD", "price_with_tax": 4157, "discount_pct": 50, "title": "酷航 台北 → 曼谷素萬那普 限時特惠", "booking_url": "https://flights.flyscoot.com/en/book?fromAirportCode=TPE&toAirportCode=BKK", "promo_page": "https://www.flyscoot.com/en/deals", "hours_remaining": 60, "expires_at": "2026-06-11T16:34:53.697464", "clicks": 789, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 21, "airline": "酷航", "airline_code": "TR", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "KUL", "destination_name": "吉隆坡", "region": "southeast_asia", "price": 1499, "currency": "TWD", "price_with_tax": 3897, "discount_pct": 52, "title": "酷航 台北 → 吉隆坡 限時特惠", "booking_url": "https://flights.flyscoot.com/en/book?fromAirportCode=TPE&toAirportCode=KUL", "promo_page": "https://www.flyscoot.com/en/deals", "hours_remaining": 96, "expires_at": "2026-06-13T04:34:53.697464", "clicks": 432, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 22, "airline": "酷航", "airline_code": "TR", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "SYD", "destination_name": "雪梨", "region": "oceania", "price": 7999, "currency": "TWD", "price_with_tax": 20797, "discount_pct": 30, "title": "酷航 台北 → 雪梨 限時特惠", "booking_url": "https://flights.flyscoot.com/en/book?fromAirportCode=TPE&toAirportCode=SYD", "promo_page": "https://www.flyscoot.com/en/deals", "hours_remaining": 120, "expires_at": "2026-06-14T04:34:53.697464", "clicks": 234, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 23, "airline": "酷航", "airline_code": "TR", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "MEL", "destination_name": "墨爾本", "region": "oceania", "price": 8500, "currency": "TWD", "price_with_tax": 22100, "discount_pct": 28, "title": "酷航 台北 → 墨爾本 限時特惠", "booking_url": "https://flights.flyscoot.com/en/book?fromAirportCode=TPE&toAirportCode=MEL", "promo_page": "https://www.flyscoot.com/en/deals", "hours_remaining": 144, "expires_at": "2026-06-15T04:34:53.697464", "clicks": 178, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 24, "airline": "酷航", "airline_code": "TR", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "DPS", "destination_name": "峇里島", "region": "southeast_asia", "price": 2199, "currency": "TWD", "price_with_tax": 5717, "discount_pct": 40, "title": "酷航 台北 → 峇里島 限時特惠", "booking_url": "https://flights.flyscoot.com/en/book?fromAirportCode=TPE&toAirportCode=DPS", "promo_page": "https://www.flyscoot.com/en/deals", "hours_remaining": 72, "expires_at": "2026-06-12T04:34:53.697464", "clicks": 654, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 25, "airline": "酷航", "airline_code": "TR", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "SGN", "destination_name": "胡志明市", "region": "southeast_asia", "price": 1799, "currency": "TWD", "price_with_tax": 4677, "discount_pct": 45, "title": "酷航 台北 → 胡志明市 限時特惠", "booking_url": "https://flights.flyscoot.com/en/book?fromAirportCode=TPE&toAirportCode=SGN", "promo_page": "https://www.flyscoot.com/en/deals", "hours_remaining": 96, "expires_at": "2026-06-13T04:34:53.697464", "clicks": 543, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 26, "airline": "亞洲航空", "airline_code": "AK", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "BKK", "destination_name": "曼谷素萬那普", "region": "southeast_asia", "price": 1299, "currency": "TWD", "price_with_tax": 3377, "discount_pct": 55, "title": "亞洲航空 台北 → 曼谷素萬那普 限時特惠", "booking_url": "https://www.airasia.com/select/zh/tw/TPE/BKK/2026-07-21/1/0/0/O/Y", "promo_page": "https://www.airasia.com/zh/tw/promotions/all-promotions.page", "hours_remaining": 96, "expires_at": "2026-06-13T04:34:53.697464", "clicks": 2103, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 27, "airline": "亞洲航空", "airline_code": "AK", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "KUL", "destination_name": "吉隆坡", "region": "southeast_asia", "price": 1199, "currency": "TWD", "price_with_tax": 3117, "discount_pct": 58, "title": "亞洲航空 台北 → 吉隆坡 限時特惠", "booking_url": "https://www.airasia.com/select/zh/tw/TPE/KUL/2026-07-21/1/0/0/O/Y", "promo_page": "https://www.airasia.com/zh/tw/promotions/all-promotions.page", "hours_remaining": 72, "expires_at": "2026-06-12T04:34:53.697464", "clicks": 1876, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 28, "airline": "亞洲航空", "airline_code": "AK", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "SIN", "destination_name": "新加坡", "region": "southeast_asia", "price": 1499, "currency": "TWD", "price_with_tax": 3897, "discount_pct": 52, "title": "亞洲航空 台北 → 新加坡 限時特惠", "booking_url": "https://www.airasia.com/select/zh/tw/TPE/SIN/2026-07-21/1/0/0/O/Y", "promo_page": "https://www.airasia.com/zh/tw/promotions/all-promotions.page", "hours_remaining": 120, "expires_at": "2026-06-14T04:34:53.697464", "clicks": 1654, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 29, "airline": "亞洲航空", "airline_code": "AK", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "HAN", "destination_name": "河內", "region": "southeast_asia", "price": 1399, "currency": "TWD", "price_with_tax": 3637, "discount_pct": 50, "title": "亞洲航空 台北 → 河內 限時特惠", "booking_url": "https://www.airasia.com/select/zh/tw/TPE/HAN/2026-07-21/1/0/0/O/Y", "promo_page": "https://www.airasia.com/zh/tw/promotions/all-promotions.page", "hours_remaining": 96, "expires_at": "2026-06-13T04:34:53.697464", "clicks": 987, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 30, "airline": "亞洲航空", "airline_code": "AK", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "SGN", "destination_name": "胡志明市", "region": "southeast_asia", "price": 1349, "currency": "TWD", "price_with_tax": 3507, "discount_pct": 52, "title": "亞洲航空 台北 → 胡志明市 限時特惠", "booking_url": "https://www.airasia.com/select/zh/tw/TPE/SGN/2026-07-21/1/0/0/O/Y", "promo_page": "https://www.airasia.com/zh/tw/promotions/all-promotions.page", "hours_remaining": 48, "expires_at": "2026-06-11T04:34:53.697464", "clicks": 876, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 31, "airline": "亞洲航空", "airline_code": "AK", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "MNL", "destination_name": "馬尼拉", "region": "southeast_asia", "price": 1099, "currency": "TWD", "price_with_tax": 2857, "discount_pct": 55, "title": "亞洲航空 台北 → 馬尼拉 限時特惠", "booking_url": "https://www.airasia.com/select/zh/tw/TPE/MNL/2026-07-21/1/0/0/O/Y", "promo_page": "https://www.airasia.com/zh/tw/promotions/all-promotions.page", "hours_remaining": 72, "expires_at": "2026-06-12T04:34:53.697464", "clicks": 765, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 32, "airline": "亞洲航空", "airline_code": "AK", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "DAD", "destination_name": "峴港", "region": "southeast_asia", "price": 1499, "currency": "TWD", "price_with_tax": 3897, "discount_pct": 48, "title": "亞洲航空 台北 → 峴港 限時特惠", "booking_url": "https://www.airasia.com/select/zh/tw/TPE/DAD/2026-07-21/1/0/0/O/Y", "promo_page": "https://www.airasia.com/zh/tw/promotions/all-promotions.page", "hours_remaining": 96, "expires_at": "2026-06-13T04:34:53.697464", "clicks": 654, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 33, "airline": "亞洲航空", "airline_code": "AK", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "DPS", "destination_name": "峇里島", "region": "southeast_asia", "price": 1999, "currency": "TWD", "price_with_tax": 5197, "discount_pct": 42, "title": "亞洲航空 台北 → 峇里島 限時特惠", "booking_url": "https://www.airasia.com/select/zh/tw/TPE/DPS/2026-07-21/1/0/0/O/Y", "promo_page": "https://www.airasia.com/zh/tw/promotions/all-promotions.page", "hours_remaining": 120, "expires_at": "2026-06-14T04:34:53.697464", "clicks": 543, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 34, "airline": "亞洲航空", "airline_code": "AK", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "HKT", "destination_name": "普吉", "region": "southeast_asia", "price": 1699, "currency": "TWD", "price_with_tax": 4417, "discount_pct": 45, "title": "亞洲航空 台北 → 普吉 限時特惠", "booking_url": "https://www.airasia.com/select/zh/tw/TPE/HKT/2026-07-21/1/0/0/O/Y", "promo_page": "https://www.airasia.com/zh/tw/promotions/all-promotions.page", "hours_remaining": 60, "expires_at": "2026-06-11T16:34:53.697464", "clicks": 432, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 35, "airline": "亞洲航空", "airline_code": "AK", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "CGK", "destination_name": "雅加達", "region": "southeast_asia", "price": 1799, "currency": "TWD", "price_with_tax": 4677, "discount_pct": 40, "title": "亞洲航空 台北 → 雅加達 限時特惠", "booking_url": "https://www.airasia.com/select/zh/tw/TPE/CGK/2026-07-21/1/0/0/O/Y", "promo_page": "https://www.airasia.com/zh/tw/promotions/all-promotions.page", "hours_remaining": 144, "expires_at": "2026-06-15T04:34:53.697464", "clicks": 321, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 36, "airline": "捷星亞洲", "airline_code": "3K", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "SIN", "destination_name": "新加坡", "region": "southeast_asia", "price": 1899, "currency": "TWD", "price_with_tax": 4937, "discount_pct": 41, "title": "捷星亞洲 台北 → 新加坡 限時特惠", "booking_url": "https://www.jetstar.com/tw/zh/flights?from=TPE&to=SIN", "promo_page": "https://www.jetstar.com/tw/zh/deals", "hours_remaining": 48, "expires_at": "2026-06-11T04:34:53.697464", "clicks": 445, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 37, "airline": "捷星亞洲", "airline_code": "3K", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "KUL", "destination_name": "吉隆坡", "region": "southeast_asia", "price": 1699, "currency": "TWD", "price_with_tax": 4417, "discount_pct": 44, "title": "捷星亞洲 台北 → 吉隆坡 限時特惠", "booking_url": "https://www.jetstar.com/tw/zh/flights?from=TPE&to=KUL", "promo_page": "https://www.jetstar.com/tw/zh/deals", "hours_remaining": 72, "expires_at": "2026-06-12T04:34:53.697464", "clicks": 334, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 38, "airline": "捷星亞洲", "airline_code": "3K", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "BKK", "destination_name": "曼谷素萬那普", "region": "southeast_asia", "price": 1599, "currency": "TWD", "price_with_tax": 4157, "discount_pct": 46, "title": "捷星亞洲 台北 → 曼谷素萬那普 限時特惠", "booking_url": "https://www.jetstar.com/tw/zh/flights?from=TPE&to=BKK", "promo_page": "https://www.jetstar.com/tw/zh/deals", "hours_remaining": 60, "expires_at": "2026-06-11T16:34:53.697464", "clicks": 287, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 39, "airline": "捷星亞洲", "airline_code": "3K", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "HAN", "destination_name": "河內", "region": "southeast_asia", "price": 1799, "currency": "TWD", "price_with_tax": 4677, "discount_pct": 42, "title": "捷星亞洲 台北 → 河內 限時特惠", "booking_url": "https://www.jetstar.com/tw/zh/flights?from=TPE&to=HAN", "promo_page": "https://www.jetstar.com/tw/zh/deals", "hours_remaining": 96, "expires_at": "2026-06-13T04:34:53.697464", "clicks": 213, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 40, "airline": "捷星亞洲", "airline_code": "3K", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "SYD", "destination_name": "雪梨", "region": "oceania", "price": 8999, "currency": "TWD", "price_with_tax": 23397, "discount_pct": 25, "title": "捷星亞洲 台北 → 雪梨 限時特惠", "booking_url": "https://www.jetstar.com/tw/zh/flights?from=TPE&to=SYD", "promo_page": "https://www.jetstar.com/tw/zh/deals", "hours_remaining": 120, "expires_at": "2026-06-14T04:34:53.697464", "clicks": 198, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 41, "airline": "捷星亞洲", "airline_code": "3K", "is_lcc": true, "origin": "TPE", "origin_name": "台北", "destination": "MEL", "destination_name": "墨爾本", "region": "oceania", "price": 9500, "currency": "TWD", "price_with_tax": 24700, "discount_pct": 22, "title": "捷星亞洲 台北 → 墨爾本 限時特惠", "booking_url": "https://www.jetstar.com/tw/zh/flights?from=TPE&to=MEL", "promo_page": "https://www.jetstar.com/tw/zh/deals", "hours_remaining": 144, "expires_at": "2026-06-15T04:34:53.697464", "clicks": 156, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 42, "airline": "長榮航空", "airline_code": "BR", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "LHR", "destination_name": "倫敦希斯羅", "region": "europe", "price": 19800, "currency": "TWD", "price_with_tax": 48312, "discount_pct": 25, "title": "長榮航空 台北 → 倫敦希斯羅 限時特惠", "booking_url": "https://www.evaair.com/zh-tw/promotions/", "promo_page": "https://www.evaair.com/zh-tw/promotions/", "hours_remaining": 168, "expires_at": "2026-06-16T04:34:53.697464", "clicks": 219, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 43, "airline": "長榮航空", "airline_code": "BR", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "CDG", "destination_name": "巴黎戴高樂", "region": "europe", "price": 21500, "currency": "TWD", "price_with_tax": 52460, "discount_pct": 22, "title": "長榮航空 台北 → 巴黎戴高樂 限時特惠", "booking_url": "https://www.evaair.com/zh-tw/promotions/", "promo_page": "https://www.evaair.com/zh-tw/promotions/", "hours_remaining": 144, "expires_at": "2026-06-15T04:34:53.697464", "clicks": 187, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 44, "airline": "長榮航空", "airline_code": "BR", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "AMS", "destination_name": "阿姆斯特丹", "region": "europe", "price": 20500, "currency": "TWD", "price_with_tax": 50020, "discount_pct": 20, "title": "長榮航空 台北 → 阿姆斯特丹 限時特惠", "booking_url": "https://www.evaair.com/zh-tw/promotions/", "promo_page": "https://www.evaair.com/zh-tw/promotions/", "hours_remaining": 200, "expires_at": "2026-06-17T12:34:53.697464", "clicks": 156, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 45, "airline": "長榮航空", "airline_code": "BR", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "LAX", "destination_name": "洛杉磯", "region": "americas", "price": 22000, "currency": "TWD", "price_with_tax": 53680, "discount_pct": 28, "title": "長榮航空 台北 → 洛杉磯 限時特惠", "booking_url": "https://www.evaair.com/zh-tw/promotions/", "promo_page": "https://www.evaair.com/zh-tw/promotions/", "hours_remaining": 120, "expires_at": "2026-06-14T04:34:53.697464", "clicks": 334, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 46, "airline": "長榮航空", "airline_code": "BR", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "JFK", "destination_name": "紐約", "region": "americas", "price": 24500, "currency": "TWD", "price_with_tax": 59780, "discount_pct": 22, "title": "長榮航空 台北 → 紐約 限時特惠", "booking_url": "https://www.evaair.com/zh-tw/promotions/", "promo_page": "https://www.evaair.com/zh-tw/promotions/", "hours_remaining": 96, "expires_at": "2026-06-13T04:34:53.697464", "clicks": 287, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 47, "airline": "長榮航空", "airline_code": "BR", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "SFO", "destination_name": "舊金山", "region": "americas", "price": 23500, "currency": "TWD", "price_with_tax": 57340, "discount_pct": 20, "title": "長榮航空 台北 → 舊金山 限時特惠", "booking_url": "https://www.evaair.com/zh-tw/promotions/", "promo_page": "https://www.evaair.com/zh-tw/promotions/", "hours_remaining": 200, "expires_at": "2026-06-17T12:34:53.697464", "clicks": 213, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 48, "airline": "長榮航空", "airline_code": "BR", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "NRT", "destination_name": "東京成田", "region": "northeast_asia", "price": 8800, "currency": "TWD", "price_with_tax": 21472, "discount_pct": 30, "title": "長榮航空 台北 → 東京成田 限時特惠", "booking_url": "https://www.evaair.com/zh-tw/promotions/", "promo_page": "https://www.evaair.com/zh-tw/promotions/", "hours_remaining": 72, "expires_at": "2026-06-12T04:34:53.697464", "clicks": 432, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 49, "airline": "長榮航空", "airline_code": "BR", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "ICN", "destination_name": "首爾仁川", "region": "northeast_asia", "price": 7200, "currency": "TWD", "price_with_tax": 17568, "discount_pct": 25, "title": "長榮航空 台北 → 首爾仁川 限時特惠", "booking_url": "https://www.evaair.com/zh-tw/promotions/", "promo_page": "https://www.evaair.com/zh-tw/promotions/", "hours_remaining": 48, "expires_at": "2026-06-11T04:34:53.697464", "clicks": 376, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 50, "airline": "長榮航空", "airline_code": "BR", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "SIN", "destination_name": "新加坡", "region": "southeast_asia", "price": 9500, "currency": "TWD", "price_with_tax": 23180, "discount_pct": 20, "title": "長榮航空 台北 → 新加坡 限時特惠", "booking_url": "https://www.evaair.com/zh-tw/promotions/", "promo_page": "https://www.evaair.com/zh-tw/promotions/", "hours_remaining": 96, "expires_at": "2026-06-13T04:34:53.697464", "clicks": 298, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 51, "airline": "長榮航空", "airline_code": "BR", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "PVG", "destination_name": "上海浦東", "region": "china", "price": 5200, "currency": "TWD", "price_with_tax": 12688, "discount_pct": 32, "title": "長榮航空 台北 → 上海浦東 限時特惠", "booking_url": "https://www.evaair.com/zh-tw/promotions/", "promo_page": "https://www.evaair.com/zh-tw/promotions/", "hours_remaining": 72, "expires_at": "2026-06-12T04:34:53.697464", "clicks": 345, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 52, "airline": "長榮航空", "airline_code": "BR", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "PEK", "destination_name": "北京", "region": "china", "price": 5500, "currency": "TWD", "price_with_tax": 13420, "discount_pct": 28, "title": "長榮航空 台北 → 北京 限時特惠", "booking_url": "https://www.evaair.com/zh-tw/promotions/", "promo_page": "https://www.evaair.com/zh-tw/promotions/", "hours_remaining": 120, "expires_at": "2026-06-14T04:34:53.697464", "clicks": 287, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 53, "airline": "中華航空", "airline_code": "CI", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "CDG", "destination_name": "巴黎戴高樂", "region": "europe", "price": 22000, "currency": "TWD", "price_with_tax": 53680, "discount_pct": 30, "title": "中華航空 台北 → 巴黎戴高樂 限時特惠", "booking_url": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "promo_page": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "hours_remaining": 120, "expires_at": "2026-06-14T04:34:53.697464", "clicks": 334, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 54, "airline": "中華航空", "airline_code": "CI", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "AMS", "destination_name": "阿姆斯特丹", "region": "europe", "price": 21800, "currency": "TWD", "price_with_tax": 53192, "discount_pct": 28, "title": "中華航空 台北 → 阿姆斯特丹 限時特惠", "booking_url": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "promo_page": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "hours_remaining": 96, "expires_at": "2026-06-13T04:34:53.697464", "clicks": 287, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 55, "airline": "中華航空", "airline_code": "CI", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "FRA", "destination_name": "法蘭克福", "region": "europe", "price": 23500, "currency": "TWD", "price_with_tax": 57340, "discount_pct": 25, "title": "中華航空 台北 → 法蘭克福 限時特惠", "booking_url": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "promo_page": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "hours_remaining": 144, "expires_at": "2026-06-15T04:34:53.697464", "clicks": 213, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 56, "airline": "中華航空", "airline_code": "CI", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "LAX", "destination_name": "洛杉磯", "region": "americas", "price": 25000, "currency": "TWD", "price_with_tax": 61000, "discount_pct": 22, "title": "中華航空 台北 → 洛杉磯 限時特惠", "booking_url": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "promo_page": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "hours_remaining": 168, "expires_at": "2026-06-16T04:34:53.697464", "clicks": 298, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 57, "airline": "中華航空", "airline_code": "CI", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "NRT", "destination_name": "東京成田", "region": "northeast_asia", "price": 9200, "currency": "TWD", "price_with_tax": 22448, "discount_pct": 28, "title": "中華航空 台北 → 東京成田 限時特惠", "booking_url": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "promo_page": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "hours_remaining": 72, "expires_at": "2026-06-12T04:34:53.697464", "clicks": 543, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 58, "airline": "中華航空", "airline_code": "CI", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "KIX", "destination_name": "大阪關西", "region": "northeast_asia", "price": 8500, "currency": "TWD", "price_with_tax": 20740, "discount_pct": 32, "title": "中華航空 台北 → 大阪關西 限時特惠", "booking_url": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "promo_page": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "hours_remaining": 48, "expires_at": "2026-06-11T04:34:53.697464", "clicks": 487, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 59, "airline": "中華航空", "airline_code": "CI", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "ICN", "destination_name": "首爾仁川", "region": "northeast_asia", "price": 7800, "currency": "TWD", "price_with_tax": 19032, "discount_pct": 25, "title": "中華航空 台北 → 首爾仁川 限時特惠", "booking_url": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "promo_page": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "hours_remaining": 60, "expires_at": "2026-06-11T16:34:53.697464", "clicks": 432, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 60, "airline": "中華航空", "airline_code": "CI", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "BKK", "destination_name": "曼谷素萬那普", "region": "southeast_asia", "price": 10500, "currency": "TWD", "price_with_tax": 25620, "discount_pct": 20, "title": "中華航空 台北 → 曼谷素萬那普 限時特惠", "booking_url": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "promo_page": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "hours_remaining": 96, "expires_at": "2026-06-13T04:34:53.697464", "clicks": 376, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 61, "airline": "中華航空", "airline_code": "CI", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "SIN", "destination_name": "新加坡", "region": "southeast_asia", "price": 11200, "currency": "TWD", "price_with_tax": 27328, "discount_pct": 18, "title": "中華航空 台北 → 新加坡 限時特惠", "booking_url": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "promo_page": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "hours_remaining": 120, "expires_at": "2026-06-14T04:34:53.697464", "clicks": 298, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 62, "airline": "中華航空", "airline_code": "CI", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "PVG", "destination_name": "上海浦東", "region": "china", "price": 6800, "currency": "TWD", "price_with_tax": 16592, "discount_pct": 35, "title": "中華航空 台北 → 上海浦東 限時特惠", "booking_url": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "promo_page": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "hours_remaining": 48, "expires_at": "2026-06-11T04:34:53.697464", "clicks": 654, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 63, "airline": "中華航空", "airline_code": "CI", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "PEK", "destination_name": "北京", "region": "china", "price": 7500, "currency": "TWD", "price_with_tax": 18300, "discount_pct": 30, "title": "中華航空 台北 → 北京 限時特惠", "booking_url": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "promo_page": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "hours_remaining": 72, "expires_at": "2026-06-12T04:34:53.697464", "clicks": 543, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 64, "airline": "中華航空", "airline_code": "CI", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "CAN", "destination_name": "廣州", "region": "china", "price": 7200, "currency": "TWD", "price_with_tax": 17568, "discount_pct": 28, "title": "中華航空 台北 → 廣州 限時特惠", "booking_url": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "promo_page": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "hours_remaining": 96, "expires_at": "2026-06-13T04:34:53.697464", "clicks": 432, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 65, "airline": "中華航空", "airline_code": "CI", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "CTU", "destination_name": "成都", "region": "china", "price": 6200, "currency": "TWD", "price_with_tax": 15128, "discount_pct": 25, "title": "中華航空 台北 → 成都 限時特惠", "booking_url": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "promo_page": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "hours_remaining": 120, "expires_at": "2026-06-14T04:34:53.697464", "clicks": 321, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 66, "airline": "中華航空", "airline_code": "CI", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "XMN", "destination_name": "廈門", "region": "china", "price": 4500, "currency": "TWD", "price_with_tax": 10980, "discount_pct": 35, "title": "中華航空 台北 → 廈門 限時特惠", "booking_url": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "promo_page": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "hours_remaining": 60, "expires_at": "2026-06-11T16:34:53.697464", "clicks": 287, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 67, "airline": "中華航空", "airline_code": "CI", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "HGH", "destination_name": "杭州", "region": "china", "price": 5400, "currency": "TWD", "price_with_tax": 13176, "discount_pct": 28, "title": "中華航空 台北 → 杭州 限時特惠", "booking_url": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "promo_page": "https://www.china-airlines.com/tw/zh/fly/discount-tickets", "hours_remaining": 96, "expires_at": "2026-06-13T04:34:53.697464", "clicks": 213, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 68, "airline": "星宇航空", "airline_code": "JX", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "LAX", "destination_name": "洛杉磯", "region": "americas", "price": 28500, "currency": "TWD", "price_with_tax": 69540, "discount_pct": 20, "title": "星宇航空 台北 → 洛杉磯 限時特惠", "booking_url": "https://www.starlux-airlines.com/zh-TW/promotions", "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions", "hours_remaining": 200, "expires_at": "2026-06-17T12:34:53.697464", "clicks": 556, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 69, "airline": "星宇航空", "airline_code": "JX", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "SFO", "destination_name": "舊金山", "region": "americas", "price": 29500, "currency": "TWD", "price_with_tax": 71980, "discount_pct": 18, "title": "星宇航空 台北 → 舊金山 限時特惠", "booking_url": "https://www.starlux-airlines.com/zh-TW/promotions", "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions", "hours_remaining": 168, "expires_at": "2026-06-16T04:34:53.697464", "clicks": 432, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 70, "airline": "星宇航空", "airline_code": "JX", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "JFK", "destination_name": "紐約", "region": "americas", "price": 31000, "currency": "TWD", "price_with_tax": 75640, "discount_pct": 15, "title": "星宇航空 台北 → 紐約 限時特惠", "booking_url": "https://www.starlux-airlines.com/zh-TW/promotions", "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions", "hours_remaining": 240, "expires_at": "2026-06-19T04:34:53.697464", "clicks": 376, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 71, "airline": "星宇航空", "airline_code": "JX", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "YVR", "destination_name": "溫哥華", "region": "americas", "price": 27500, "currency": "TWD", "price_with_tax": 67100, "discount_pct": 18, "title": "星宇航空 台北 → 溫哥華 限時特惠", "booking_url": "https://www.starlux-airlines.com/zh-TW/promotions", "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions", "hours_remaining": 120, "expires_at": "2026-06-14T04:34:53.697464", "clicks": 298, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 72, "airline": "星宇航空", "airline_code": "JX", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "NRT", "destination_name": "東京成田", "region": "northeast_asia", "price": 9800, "currency": "TWD", "price_with_tax": 23912, "discount_pct": 25, "title": "星宇航空 台北 → 東京成田 限時特惠", "booking_url": "https://www.starlux-airlines.com/zh-TW/promotions", "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions", "hours_remaining": 72, "expires_at": "2026-06-12T04:34:53.697464", "clicks": 543, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 73, "airline": "星宇航空", "airline_code": "JX", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "KIX", "destination_name": "大阪關西", "region": "northeast_asia", "price": 9200, "currency": "TWD", "price_with_tax": 22448, "discount_pct": 22, "title": "星宇航空 台北 → 大阪關西 限時特惠", "booking_url": "https://www.starlux-airlines.com/zh-TW/promotions", "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions", "hours_remaining": 48, "expires_at": "2026-06-11T04:34:53.697464", "clicks": 487, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 74, "airline": "星宇航空", "airline_code": "JX", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "ICN", "destination_name": "首爾仁川", "region": "northeast_asia", "price": 8500, "currency": "TWD", "price_with_tax": 20740, "discount_pct": 20, "title": "星宇航空 台北 → 首爾仁川 限時特惠", "booking_url": "https://www.starlux-airlines.com/zh-TW/promotions", "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions", "hours_remaining": 96, "expires_at": "2026-06-13T04:34:53.697464", "clicks": 376, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 75, "airline": "星宇航空", "airline_code": "JX", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "SIN", "destination_name": "新加坡", "region": "southeast_asia", "price": 12000, "currency": "TWD", "price_with_tax": 29280, "discount_pct": 15, "title": "星宇航空 台北 → 新加坡 限時特惠", "booking_url": "https://www.starlux-airlines.com/zh-TW/promotions", "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions", "hours_remaining": 120, "expires_at": "2026-06-14T04:34:53.697464", "clicks": 234, "scraped_at": "2026-06-09T04:34:53.697464"}, {"id": 76, "airline": "星宇航空", "airline_code": "JX", "is_lcc": false, "origin": "TPE", "origin_name": "台北", "destination": "BKK", "destination_name": "曼谷素萬那普", "region": "southeast_asia", "price": 11500, "currency": "TWD", "price_with_tax": 28060, "discount_pct": 18, "title": "星宇航空 台北 → 曼谷素萬那普 限時特惠", "booking_url": "https://www.starlux-airlines.com/zh-TW/promotions", "promo_page": "https://www.starlux-airlines.com/zh-TW/promotions", "hours_remaining": 96, "expires_at": "2026-06-13T04:34:53.697464", "clicks": 287, "scraped_at": "2026-06-09T04:34:53.697464"}]};
+// ─── Boot ─────────────────────────────────────────────────────
+loadDeals()
+loadReport()
+</script>
+</body>
+</html>

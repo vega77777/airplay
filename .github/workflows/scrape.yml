@@ -1,0 +1,49 @@
+name: Scrape flight deals
+
+# 每天台北時間 08:00 與 20:00 自動抓取，並可手動觸發
+on:
+  schedule:
+    - cron: "0 0,12 * * *"   # UTC 00:00 / 12:00 = 台北 08:00 / 20:00
+  workflow_dispatch:
+
+# 需要寫入權限，才能把更新後的資料 commit 回 repo
+permissions:
+  contents: write
+
+# 避免兩次排程重疊
+concurrency:
+  group: scrape-flight-deals
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies + Playwright Chromium
+        run: |
+          python -m pip install --upgrade pip
+          pip install playwright beautifulsoup4
+          python -m playwright install --with-deps chromium
+
+      - name: Run scraper + build report
+        run: python monitor.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add deals.json price_report.txt price_history.csv .last_cheapest.json
+          if git diff --staged --quiet; then
+            echo "資料無變動，略過 commit"
+          else
+            git commit -m "chore: 更新機票最低價 ($(date -u +'%Y-%m-%d %H:%M UTC'))"
+            git push
+          fi
