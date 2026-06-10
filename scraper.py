@@ -212,6 +212,96 @@ CHINA_ROUTES = [
 BOOKING_BY_CODE = {a["code"]: a["booking_url"] for a in AIRLINES}
 
 
+# ── Travelpayouts (Aviasales) Data API：真實票價來源 ──────────────
+# token 走環境變數，不寫進原始碼（GitHub Secret: TP_TOKEN）。
+# marker 是聯盟行銷代碼（公開值），透過深連結訂票可獲佣金。
+TP_MARKER = os.environ.get("TP_MARKER", "737996")
+
+# 航空 IATA 代碼 → 中文名（API 以代碼回傳；未列者直接顯示代碼）
+CODE_TO_NAME = {a["code"]: a["airline"] for a in AIRLINES}
+CODE_TO_NAME.update({
+    "CX": "國泰航空", "D7": "亞洲航空 X", "JQ": "捷星航空", "GK": "捷星日本",
+    "NH": "全日空", "JL": "日本航空", "KE": "大韓航空", "OZ": "韓亞航空",
+    "TG": "泰國航空", "SQ": "新加坡航空", "MH": "馬來西亞航空", "PR": "菲律賓航空",
+    "VN": "越南航空", "VJ": "越捷航空", "CZ": "中國南方航空", "MU": "中國東方航空",
+    "CA": "中國國際航空", "HX": "香港航空", "UO": "香港快運", "5J": "宿霧太平洋",
+    "SL": "泰國獅航", "FD": "泰國亞航",
+})
+LCC_CODES = {"IT", "MM", "TR", "AK", "D7", "3K", "JQ", "GK",
+             "VJ", "5J", "SL", "FD", "UO"}
+
+
+def _build_baseline():
+    """(code, iata) → 行情基準價，用來推估折扣（不憑空捏造）。"""
+    base = {}
+    for cfg in AIRLINES:
+        for iata, price, _ in cfg["fallback"]:
+            base[(cfg["code"], iata)] = price
+    for _airline, code, _lcc, iata, price, _disc in CHINA_ROUTES:
+        base[(code, iata)] = price
+    return base
+
+
+BASELINE = _build_baseline()
+
+
+def _aviasales_link(iata, depart_date):
+    """組 Aviasales 單程搜尋深連結（含 marker，點擊訂票可獲聯盟佣金）。"""
+    dm = ""
+    if depart_date and len(depart_date) >= 10:
+        try:
+            dm = datetime.strptime(depart_date[:10], "%Y-%m-%d").strftime("%d%m")
+        except Exception:
+            dm = ""
+    path = f"TPE{dm}{iata}1" if dm else f"TPE{iata}"
+    return f"https://www.aviasales.com/search/{path}?marker={TP_MARKER}"
+
+
+def fetch_travelpayouts(token, limit=300):
+    """從 Travelpayouts Data API 取台北出發的真實最低票價（source=live）。
+    失敗或無資料時回傳 []，呼叫端會自動退回 fallback。"""
+    import urllib.request
+
+    url = ("https://api.travelpayouts.com/v2/prices/latest"
+           "?currency=twd&origin=TPE&period_type=year&one_way=true"
+           f"&page=1&limit={limit}&show_to_affiliates=true&sorting=price&token={token}")
+    try:
+        req = urllib.request.Request(url, headers={"X-Access-Token": token})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            payload = json.load(r)
+    except Exception as e:
+        print(f"[TP] API 取得失敗：{e}")
+        return []
+
+    if not payload.get("success"):
+        print(f"[TP] API success=false：{payload.get('error')}")
+        return []
+
+    deals = []
+    for it in payload.get("data") or []:
+        iata = it.get("destination")
+        price = it.get("value") or it.get("price")
+        if not iata or not price or iata in ("TPE", "KHH", "RMQ"):
+            continue
+        if "actual" in it and not it.get("actual"):
+            continue  # 跳過過期/非現價
+        code = (it.get("airline") or it.get("gate") or "").strip().upper()
+        airline = CODE_TO_NAME.get(code, code or "多家航空")
+        depart = it.get("depart_date") or it.get("departure_at") or ""
+        link = _aviasales_link(iata, depart)
+        base = BASELINE.get((code, iata))
+        disc = round((1 - price / base) * 100) if base and price < base else 0
+        d = make_deal(airline, code or "XX", code in LCC_CODES, iata,
+                      int(price), disc, link, "live", link)
+        exp = it.get("expires_at")
+        if exp:
+            d["_expires_raw"] = exp
+        deals.append(d)
+
+    print(f"[TP] 取得 {len(deals)} 筆真實票價")
+    return deals
+
+
 def make_deal(airline, code, is_lcc, iata, price, discount, booking_url,
               source, promo_url):
     """組一筆標準格式 deal（欄位與 deals.json / 前端一致）"""
@@ -297,12 +387,20 @@ def build_fallback(cfg):
 def run_all():
     print("=" * 56)
     print("飛出台灣 爬蟲啟動 —", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    print("Playwright:", "可用" if HAS_PLAYWRIGHT else "未安裝（全程用 fallback）")
+
+    # 真實票價優先：有 TP_TOKEN 就用 Travelpayouts API；沒有才走 Playwright
+    token = os.environ.get("TP_TOKEN", "").strip()
+    api_deals = fetch_travelpayouts(token) if token else []
+    if token and not api_deals:
+        print("[TP] 無即時資料，全程退回行情 fallback")
+    use_browser = HAS_PLAYWRIGHT and not token
+    print("即時來源:", "Travelpayouts API" if token else
+          ("Playwright" if HAS_PLAYWRIGHT else "無（全程用 fallback）"))
     print("=" * 56)
 
-    all_deals = []
+    all_deals = list(api_deals)
     browser = pw = None
-    if HAS_PLAYWRIGHT:
+    if use_browser:
         try:
             pw = sync_playwright().start()
             browser = pw.chromium.launch(headless=True)
@@ -342,11 +440,14 @@ def run_all():
     if pw:
         pw.stop()
 
-    # 去重：同一航空 + 同一目的地只保留「最低價」那筆
+    # 去重：同一航空 + 同一目的地只保留「最低價」那筆；同價時 live 優先
     best = {}
     for d in all_deals:
         key = (d["airline_code"], d["destination"])
-        if key not in best or d["price"] < best[key]["price"]:
+        cur = best.get(key)
+        if (cur is None or d["price"] < cur["price"]
+                or (d["price"] == cur["price"]
+                    and d.get("source") == "live" and cur.get("source") != "live")):
             best[key] = d
     unique = list(best.values())
 
@@ -356,11 +457,21 @@ def run_all():
         d["id"] = i + 1
         if d.get("discount_pct") is None:
             d["discount_pct"] = random.randint(15, 60)
-        d.setdefault("hours_remaining", random.randint(12, 240))
+        exp_raw = d.pop("_expires_raw", None)
+        if exp_raw:
+            try:
+                edt = datetime.fromisoformat(
+                    str(exp_raw).replace("Z", "+00:00")).replace(tzinfo=None)
+                d["expires_at"] = edt.isoformat()
+                d["hours_remaining"] = max(1, int((edt - now).total_seconds() // 3600))
+            except Exception:
+                exp_raw = None
+        if not exp_raw:
+            d.setdefault("hours_remaining", random.randint(12, 240))
+            d["expires_at"] = (now + timedelta(hours=d["hours_remaining"])).isoformat()
         d.setdefault("clicks", random.randint(50, 2000))
         tax_rate = 0.25 if d["is_lcc"] else 0.20
         d["price_with_tax"] = int(d["price"] * 2 * (1 + tax_rate))  # 來回含稅估算
-        d["expires_at"] = (now + timedelta(hours=d["hours_remaining"])).isoformat()
 
     # 排序：價格由低到高（呼應「全站最便宜」）
     unique.sort(key=lambda x: x["price"])
