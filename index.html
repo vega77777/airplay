@@ -339,6 +339,26 @@ footer{position:relative;z-index:1;background:rgba(0,0,0,.3);border-top:1px soli
 .badge-deal{display:inline-block;background:linear-gradient(135deg,#d97706,#f59e0b);color:#fff;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:4px;margin-left:4px;vertical-align:middle;letter-spacing:.03em}
 @media(max-width:480px){.bargain-list{grid-template-columns:1fr 1fr}}
 
+/* ─── Route Compare（熱門航線比價）─── */
+.route-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:1000px){.route-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.route-grid{grid-template-columns:1fr}}
+.route-card{display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px 18px;transition:var(--tr);cursor:pointer}
+.route-card:hover{transform:translateY(-3px);border-color:rgba(251,191,36,.5);background:rgba(255,255,255,.07)}
+.rc-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.rc-dest{font-weight:900;font-size:1.08rem;color:#fff}
+.rc-iata{font-size:.7rem;color:var(--g600);letter-spacing:.5px}
+.rc-min{font-size:1.45rem;font-weight:900;color:#fbbf24;margin-bottom:10px}
+.rc-min span{font-size:.72rem;font-weight:400;color:var(--g400);margin-left:4px}
+.rc-row{display:flex;justify-content:space-between;font-size:.74rem;color:var(--g400);margin-top:7px}
+.rc-row b{color:#e8eaed;font-weight:700}
+.rc-bar{height:5px;border-radius:3px;background:rgba(255,255,255,.07);margin-top:3px;overflow:hidden}
+.rc-bar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#34d399,#fbbf24)}
+.rc-bar.full i{background:rgba(255,255,255,.22)}
+.rc-save{display:inline-block;margin-top:10px;padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:700;color:#34d399;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3)}
+.rc-all{display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--g400);border-style:dashed}
+.rc-all:hover{color:#fbbf24}
+
 </style>
 </head>
 <body>
@@ -429,6 +449,21 @@ footer{position:relative;z-index:1;background:rgba(0,0,0,.3);border-top:1px soli
         <div class="bargain-sub">全站最低價 TOP 5・即時更新</div>
       </div>
       <div class="bargain-list" id="bargainList">
+        <!-- filled by JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Route Compare（熱門航線比價） -->
+<section class="section" id="route-compare" style="padding-top:0">
+  <div class="container">
+    <div class="bargain-section">
+      <div class="bargain-header">
+        <div class="bargain-title">🗺 熱門航線比價</div>
+        <div class="bargain-sub">廉航 vs 傳統航空價差一眼看懂・點卡片看完整比較與走勢</div>
+      </div>
+      <div class="route-grid" id="routeGrid">
         <!-- filled by JS -->
       </div>
     </div>
@@ -893,6 +928,10 @@ function initPage(stats) {
   const cheapest = [...allDeals].sort((a,b) => a.price-b.price)[0]
   if(cheapest) renderHeroCard(cheapest)
 
+  // 破盤榜 + 熱門航線比價
+  renderBargainBoard(allDeals)
+  renderRouteBoard(allDeals)
+
   // Initial render
   applyFilters()
 
@@ -1208,6 +1247,44 @@ function renderBargainBoard(deals) {
       ${d.discount_pct?`<div class="bargain-disc">比原價省 ${d.discount_pct}%</div>`:''}
     </div>`
   }).join('')
+}
+
+// ─── 熱門航線比價（廉航 vs 傳統價差，連到 SEO 航線頁）──────────
+function renderRouteBoard(deals) {
+  const grid = document.getElementById('routeGrid')
+  if(!grid) return
+  const POPULAR = ['NRT','KIX','ICN','BKK','CTS','FUK','OKA','PVG','SIN','HKG','SGN','DPS']
+  const byDest = {}
+  deals.forEach(d => { (byDest[d.destination] = byDest[d.destination] || []).push(d) })
+  const minOf = c => Math.min(...byDest[c].map(d => d.price))
+  // 先取熱門清單中有資料的，不足 8 張再用最便宜的補
+  const picks = POPULAR.filter(c => byDest[c])
+  Object.keys(byDest).sort((a,b) => minOf(a) - minOf(b)).forEach(c => {
+    if(!picks.includes(c) && picks.length < 8) picks.push(c)
+  })
+  grid.innerHTML = picks.slice(0,8).map(code => {
+    const ds = byDest[code]
+    const cheapest = ds.reduce((m,d) => d.price < m.price ? d : m)
+    const lcc  = ds.filter(d => d.is_lcc).map(d => d.price)
+    const full = ds.filter(d => !d.is_lcc).map(d => d.price)
+    const lccMin  = lcc.length  ? Math.min(...lcc)  : null
+    const fullMin = full.length ? Math.min(...full) : null
+    const both = lccMin != null && fullMin != null
+    const save = both && fullMin > lccMin ? Math.round((1 - lccMin/fullMin) * 100) : 0
+    const compare = both ? `
+      <div class="rc-row"><span>🟢 廉航最低</span><b>$${lccMin.toLocaleString()}</b></div>
+      <div class="rc-bar"><i style="width:${Math.max(8, lccMin/Math.max(lccMin,fullMin)*100)}%"></i></div>
+      <div class="rc-row"><span>⚪ 傳統最低</span><b>$${fullMin.toLocaleString()}</b></div>
+      <div class="rc-bar full"><i style="width:${Math.max(8, fullMin/Math.max(lccMin,fullMin)*100)}%"></i></div>
+      ${save > 0 ? `<div class="rc-save">搭廉航現省 ${save}%</div>` : ''}`
+    : `<div class="rc-row"><span>${ds.length} 家航空比價</span><b>看詳情 →</b></div>`
+    return `<a class="route-card" href="routes/tpe-${code.toLowerCase()}.html" data-track="route" data-dest="${code}">
+      <div class="rc-top"><span class="rc-dest">${cheapest.destination_name || code}</span><span class="rc-iata">TPE → ${code}</span></div>
+      <div class="rc-min">$${cheapest.price.toLocaleString()}<span>起 · ${cheapest.airline}</span></div>
+      ${compare}
+    </a>`
+  }).join('') +
+  `<a class="route-card rc-all" href="routes/">查看全部 ${Object.keys(byDest).length} 條航線 →</a>`
 }
 
 function countClick(id){
