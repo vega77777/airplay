@@ -346,12 +346,11 @@ footer{position:relative;z-index:1;background:rgba(0,0,0,.3);border-top:1px soli
   <ul class="nav-links">
     <li><a href="#deals" class="active">特惠看板</a></li>
     <li><a href="#airlines">航空情報</a></li>
-    <li><a href="#radar">雷達訂閱</a></li>
-    <li><a href="#">知識庫</a></li>
-    <li><a href="#">關於我們</a></li>
+    <li><a href="#about">關於我們</a></li>
+    <li><a href="#sponsor">贊助我們</a></li>
   </ul>
   <div class="nav-right">
-    <a href="#radar" class="btn-radar">🔔 開啟雷達</a>
+    <a href="#sponsor" class="btn-radar">💛 贊助我們</a>
     <button class="hamburger" id="hamburger" aria-label="選單">
       <span></span><span></span><span></span>
     </button>
@@ -360,10 +359,9 @@ footer{position:relative;z-index:1;background:rgba(0,0,0,.3);border-top:1px soli
 <div class="mobile-menu" id="mobileMenu">
   <a href="#deals">✈ 特惠看板</a>
   <a href="#airlines">🏢 航空情報</a>
-  <a href="#radar">🔔 雷達訂閱</a>
-  <a href="#">📚 知識庫</a>
-  <a href="#">ℹ️ 關於我們</a>
-  <a href="#radar" class="btn-radar">🔔 開啟雷達</a>
+  <a href="#about">ℹ️ 關於我們</a>
+  <a href="#sponsor">💛 贊助我們</a>
+  <a href="#sponsor" class="btn-radar">💛 贊助我們</a>
 </div>
 
 <!-- Hero -->
@@ -378,11 +376,11 @@ footer{position:relative;z-index:1;background:rgba(0,0,0,.3);border-top:1px soli
       <div class="hero-stats">
         <div><div class="stat-num" id="hs-total">--</div><div class="stat-lbl">今日有效促銷</div></div>
         <div><div class="stat-num">8</div><div class="stat-lbl">家航空公司</div></div>
-        <div><div class="stat-num">2,847</div><div class="stat-lbl">雷達訂閱人數</div></div>
+        <div><div class="stat-num">6</div><div class="stat-lbl">涵蓋區域</div></div>
       </div>
       <div class="hero-actions">
         <a href="#deals" class="btn-primary">🔥 立即搶票 →</a>
-        <a href="#radar" class="btn-secondary">🔔 設定雷達</a>
+        <a href="#about" class="btn-secondary">ℹ️ 認識我們</a>
       </div>
     </div>
     <!-- Top deal card (populated by JS) -->
@@ -406,7 +404,7 @@ footer{position:relative;z-index:1;background:rgba(0,0,0,.3);border-top:1px soli
     <div class="stats-strip">
       <div class="stat-card"><div class="stat-icon">✈</div><div class="stat-number" id="st-total">--</div><div class="stat-label">今日有效促銷</div></div>
       <div class="stat-card"><div class="stat-icon">🏢</div><div class="stat-number">8</div><div class="stat-label">監控航空公司</div></div>
-      <div class="stat-card"><div class="stat-icon">🔔</div><div class="stat-number">2,847</div><div class="stat-label">雷達訂閱人數</div></div>
+      <div class="stat-card"><div class="stat-icon">🌏</div><div class="stat-number">6</div><div class="stat-label">涵蓋區域</div></div>
       <div class="stat-card"><div class="stat-icon">⏱</div><div class="stat-number">15<span style="font-size:1rem">分</span></div><div class="stat-label">資料更新頻率</div></div>
     </div>
   </div>
@@ -519,45 +517,70 @@ footer{position:relative;z-index:1;background:rgba(0,0,0,.3);border-top:1px soli
   </div>
 </section>
 
-<!-- Radar Section -->
-<section class="section" id="radar">
+<!-- About Section -->
+<section class="section section-alt" id="about">
   <div class="container">
-    <div class="radar-section">
-      <div>
-        <div class="radar-badge">🛰 搶票雷達系統</div>
-        <h2 class="radar-title">設定一次<br>永遠不再錯過特惠</h2>
-        <p class="radar-desc">選擇目的地與預算，當符合條件的限時促銷上線，即刻推播到你的手機，直附官方訂票連結。</p>
-        <div class="radar-channels">
-          <button class="ch-btn ch-line" onclick="openRadar()">💬 LINE 推播</button>
-          <button class="ch-btn ch-tg" onclick="openRadar()">✈ Telegram</button>
-          <button class="ch-btn ch-em" onclick="openRadar()">📧 Email</button>
-        </div>
+    <div class="section-header">
+      <div class="section-label">關於我們</div>
+      <h2 class="section-title">小魚旅遊有限公司</h2>
+      <p class="section-subtitle">讓每一個想出走的人，都飛得起、走得遠</p>
+    </div>
+    <div style="max-width:860px;margin:0 auto;display:grid;gap:1.25rem">
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:1.75rem 2rem">
+        <h3 style="font-size:1.15rem;font-weight:800;margin:0 0 .75rem;color:#fff">🐟 我們的起點</h3>
+        <p style="font-size:.95rem;line-height:1.9;color:var(--g400);margin:0">
+          小魚旅遊，是從一個很小的願望開始的。<br>
+          創辦人小時候住在海邊的小漁村，每天看著漁船出港、看著飛機從頭頂飛向遠方，
+          總在想：「外面的世界，是什麼模樣？」可是對許多家庭來說，一張機票的價格，
+          往往就是一個夢想被默默收進抽屜的理由。我們始終相信——看世界，不該是有錢人的特權。
+          就像一尾小魚，再小，也能游向整片海洋。
+        </p>
       </div>
-      <div class="radar-prefs">
-        <div class="rp-title">快速設定偏好</div>
-        <div class="pref-group">
-          <div class="pref-label">目的地</div>
-          <div class="pref-chips">
-            <button class="pref-chip sel" onclick="this.classList.toggle('sel')">日本</button>
-            <button class="pref-chip sel" onclick="this.classList.toggle('sel')">中國大陸</button>
-            <button class="pref-chip" onclick="this.classList.toggle('sel')">東南亞</button>
-            <button class="pref-chip" onclick="this.classList.toggle('sel')">歐洲</button>
-            <button class="pref-chip" onclick="this.classList.toggle('sel')">美洲</button>
-          </div>
-        </div>
-        <div class="pref-group">
-          <div class="pref-label">航空類型</div>
-          <div class="pref-chips">
-            <button class="pref-chip sel" onclick="this.classList.toggle('sel')">廉航</button>
-            <button class="pref-chip sel" onclick="this.classList.toggle('sel')">傳統航空</button>
-          </div>
-        </div>
-        <div class="pref-group">
-          <div class="pref-label">最高票價（TWD 未稅）</div>
-          <input class="pref-input" type="number" placeholder="例：5000（0 表示不限）" min="0" step="500">
-        </div>
-        <button class="btn-subscribe" onclick="subscribe()">🔔 立即訂閱（免費）</button>
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:1.75rem 2rem">
+        <h3 style="font-size:1.15rem;font-weight:800;margin:0 0 .75rem;color:#fff">💡 我們在做的事</h3>
+        <p style="font-size:.95rem;line-height:1.9;color:var(--g400);margin:0">
+          我們打造「飛出台灣」，每天自動掃描台灣起飛的 8 家航空公司、橫跨六大區域的真實票價，
+          把最低價、最值得的促銷，第一時間整理在同一個地方。
+          不用再開十幾個分頁、不用再比到眼花——我們替你把世界，整理成一張看得懂的清單。
+          因為我們知道，省下來的每一塊錢，都是離夢想更近的一步。
+        </p>
       </div>
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:1.75rem 2rem">
+        <h3 style="font-size:1.15rem;font-weight:800;margin:0 0 .75rem;color:#fff">🌊 我們的承諾</h3>
+        <p style="font-size:.95rem;line-height:1.9;color:var(--g400);margin:0">
+          我們承諾，把「誠實」放在每一筆票價前面：價格只是參考，
+          一定帶你回到航空公司官網確認，絕不誇大、不製造焦慮。
+          我們希望你因為「想去」而出發，而不是因為「怕錯過」而衝動。
+          願每一個平凡的日子裡，都有一張說走就走的機票，等著你。<br>
+          <span style="color:#fff;font-weight:700">小魚旅遊有限公司　敬上</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sponsor Section -->
+<section class="section" id="sponsor">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">支持我們</div>
+      <h2 class="section-title">請小魚喝杯咖啡 ☕</h2>
+      <p class="section-subtitle">你的每一份贊助，都是我們繼續飛行的燃料</p>
+    </div>
+    <div style="max-width:620px;margin:0 auto;background:linear-gradient(135deg,rgba(255,107,53,.12),rgba(255,107,53,.04));border:1px solid rgba(255,107,53,.3);border-radius:20px;padding:2.25rem 2rem;text-align:center">
+      <div style="font-size:2.5rem;margin-bottom:.75rem">💛</div>
+      <p style="font-size:.95rem;line-height:1.9;color:var(--g400);margin:0 0 1.5rem">
+        「飛出台灣」是完全免費的服務。我們每天自動更新真實票價，
+        背後需要伺服器與資料來源的成本。如果這個網站曾經幫你省到錢、找到一趟旅行，
+        歡迎贊助我們，讓這尾小魚可以一直游下去，幫助更多人飛向世界。
+      </p>
+      <a href="https://p.ecpay.com.tw/3DCC64A" target="_blank" rel="noopener"
+         style="display:inline-block;padding:15px 40px;background:linear-gradient(135deg,#ff6b35,#ff8c42);color:#fff;font-weight:800;font-size:1rem;border-radius:100px;text-decoration:none;box-shadow:0 8px 24px rgba(255,107,53,.35)">
+        💝 立即贊助（綠界安全付款）
+      </a>
+      <p style="font-size:.74rem;color:var(--g400);margin:1.25rem 0 0;opacity:.8">
+        透過綠界 ECPay 安全金流處理，支援信用卡與多種付款方式
+      </p>
     </div>
   </div>
 </section>
@@ -598,7 +621,8 @@ footer{position:relative;z-index:1;background:rgba(0,0,0,.3);border-top:1px soli
     <div class="footer-col">
       <h4>關於</h4>
       <ul class="footer-links">
-        <li><a href="#">關於我們</a></li>
+        <li><a href="#about">關於我們</a></li>
+        <li><a href="#sponsor">贊助我們</a></li>
         <li><a href="#">廣告合作</a></li>
         <li><a href="#">隱私政策</a></li>
         <li><a href="#">服務條款</a></li>
@@ -613,18 +637,13 @@ footer{position:relative;z-index:1;background:rgba(0,0,0,.3);border-top:1px soli
 </footer>
 
 <div class="toast-wrap" id="toastWrap"></div>
-<div class="modal-overlay" id="radarModal">
-  <div class="modal">
+<div class="modal-overlay" id="dealModal">
+  <div class="modal" style="max-width:460px">
     <div class="modal-header">
-      <div class="modal-title">🔔 開啟搶票雷達</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-title" id="dmTitle">優惠詳情</div>
+      <button class="modal-close" onclick="closeDealModal()">✕</button>
     </div>
-    <p style="font-size:.88rem;color:var(--g400);line-height:1.6;margin-bottom:1.5rem">選擇推播管道，促銷一出現立即通知你！</p>
-    <div style="display:flex;flex-direction:column;gap:.75rem">
-      <button class="ch-btn ch-line" style="justify-content:center;padding:14px" onclick="confirmRadar('LINE')">💬 加入 LINE 官方帳號</button>
-      <button class="ch-btn ch-tg" style="justify-content:center;padding:14px" onclick="confirmRadar('Telegram')">✈ 加入 Telegram 頻道</button>
-      <button class="ch-btn ch-em" style="justify-content:center;padding:14px" onclick="confirmRadar('Email')">📧 Email 訂閱</button>
-    </div>
+    <div id="dmBody"></div>
   </div>
 </div>
 
@@ -905,7 +924,7 @@ function makeCard(d) {
       <div class="card-cdown">⏰ 距截止 <span class="t" data-hours="${d.hours_remaining||0}" data-id="${d.id}">計算中</span></div>
       <div class="card-footer">
         <div class="hot-cnt">🔥 ${(d.clicks||0).toLocaleString()} 人點擊</div>
-        <a href="${d.booking_url}" target="_blank" rel="noopener" class="btn-go" onclick="countClick(${d.id})">🎫 查看此優惠</a>
+        <button class="btn-go" onclick="openDealModal(${d.id})">🎫 查看此優惠</button>
       </div>
     </div>
   </div>`
@@ -959,7 +978,7 @@ function renderHeroCard(d) {
       <span class="cdown-digits" id="heroCD" data-hours="${d.hours_remaining||0}">--:--:--</span>
     </div>
     <div class="card-actions">
-      <a href="${d.booking_url}" target="_blank" rel="noopener" class="btn-book" onclick="countClick(${d.id})">🎫 直達此優惠方案 ↗</a>
+      <button class="btn-book" onclick="openDealModal(${d.id})">🎫 查看此優惠方案</button>
       <button class="btn-save" onclick="saveItem(this)">🔖 加入追蹤</button>
     </div>
     <div class="hot-ind"><span class="hot-dot"></span>今日已有 <strong style="color:var(--orange);margin:0 4px">${(d.clicks||0).toLocaleString()}</strong> 人點擊此促銷</div>
@@ -1081,7 +1100,7 @@ function renderBargainBoard(deals) {
     const destN = DEST_NAME[d.destination]||d.destination
     const rankCls = rank<=3 ? 'top3' : ''
     const rankIcon = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':`#${rank}`
-    return `<div class="bargain-item" onclick="window.open('${d.booking_url}','_blank')">
+    return `<div class="bargain-item" onclick="openDealModal(${d.id})">
       <div class="bargain-rank ${rankCls}">${rankIcon}</div>
       <div class="bargain-dest">${destN}</div>
       <div class="bargain-al">${d.airline}</div>
@@ -1102,17 +1121,41 @@ function saveItem(btn){
   showToast('🔖','加入追蹤','票價截止前會提醒你')
 }
 
-// ─── Radar ────────────────────────────────────────────────────
-function openRadar(){document.getElementById('radarModal').classList.add('open')}
-function closeModal(){document.getElementById('radarModal').classList.remove('open')}
-document.getElementById('radarModal').addEventListener('click',function(e){if(e.target===this)closeModal()})
-function confirmRadar(ch){closeModal();showToast('🔔','雷達已開啟！',`將透過 ${ch} 推播符合條件的促銷`)}
-function subscribe(){
-  const sel=[...document.querySelectorAll('.pref-chip.sel')].map(c=>c.textContent)
-  if(!sel.length){showToast('⚠️','請選擇目的地','');return}
-  showToast('🎉','偏好已儲存','請選擇推播管道')
-  setTimeout(()=>document.getElementById('radarModal').classList.add('open'),800)
+// ─── Deal Detail Modal ────────────────────────────────────────
+function openDealModal(id){
+  const d = allDeals.find(x=>x.id===id)
+  if(!d) return
+  countClick(id)
+  const destName = d.destination_name || d.destination
+  const flag = DEST_FLAGS[d.destination] || '🌍'
+  const img = DEST_IMG[d.destination] || ''
+  const alEmoji = AL_EMOJI[d.airline_code] || '✈'
+  const tag = d.is_lcc ? '廉航' : '傳統航空'
+  const disc = d.discount_pct ? `<span style="margin-left:8px;font-size:.8rem;font-weight:800;color:var(--orange)">-${d.discount_pct}%</span>` : ''
+  const tax = d.price_with_tax ? `含稅約 $${d.price_with_tax.toLocaleString()} TWD · 來回` : ''
+  document.getElementById('dmTitle').textContent = `${destName} ${flag}`
+  document.getElementById('dmBody').innerHTML = `
+    <div style="border-radius:14px;overflow:hidden;height:140px;background:url('${img}') center/cover,linear-gradient(135deg,#1a3a6b,#0B1426);margin-bottom:1.1rem"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+      <span style="font-weight:700;color:#fff">${alEmoji} ${d.airline}</span>
+      <span style="font-size:.72rem;padding:3px 12px;border-radius:100px;background:rgba(255,255,255,.08);color:var(--g400)">${tag}</span>
+    </div>
+    <div style="font-size:.9rem;color:var(--g400);margin-bottom:1rem">${d.origin_name||'台北'} (${d.origin||'TPE'}) → ${destName} (${d.destination})</div>
+    <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:.25rem">
+      <span style="font-size:2.1rem;font-weight:900;color:var(--orange)">$${d.price.toLocaleString()}</span>
+      <span style="color:var(--g400);font-size:.9rem">TWD 起</span>${disc}
+    </div>
+    <div style="font-size:.82rem;color:var(--g400);margin-bottom:1.1rem">${tax}</div>
+    <div style="background:rgba(255,255,255,.04);border-radius:12px;padding:.85rem 1rem;font-size:.82rem;color:var(--g400);line-height:1.8;margin-bottom:1.3rem">
+      🔥 今日 ${(d.clicks||0).toLocaleString()} 人查看　·　⏰ 約 ${d.hours_remaining||0} 小時後截止<br>
+      票價為參考，實際金額與艙位請以航空公司官網顯示為準。
+    </div>
+    <a href="${d.booking_url}" target="_blank" rel="noopener" class="btn-go" style="display:block;text-align:center;padding:15px;font-size:1rem" onclick="countClick(${d.id})">🎫 前往官網訂票 ↗</a>
+  `
+  document.getElementById('dealModal').classList.add('open')
 }
+function closeDealModal(){document.getElementById('dealModal').classList.remove('open')}
+document.getElementById('dealModal').addEventListener('click',function(e){if(e.target===this)closeDealModal()})
 
 
 // ─── Inline Data (no server needed) ─────────────────────
