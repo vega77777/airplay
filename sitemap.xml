@@ -2,8 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://airplay-jet.vercel.app/</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/</loc><lastmod>2026-08-25</lastmod></url>
+  <url><loc>https://airplay-jet.vercel.app/routes/tpe-aap.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-aat.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-aer.html</loc><lastmod>2026-08-25</lastmod></url>
+  <url><loc>https://airplay-jet.vercel.app/routes/tpe-akj.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-akl.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-ala.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-ams.html</loc><lastmod>2026-08-25</lastmod></url>
@@ -36,13 +38,13 @@
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-cju.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-ckg.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-cnx.html</loc><lastmod>2026-08-25</lastmod></url>
+  <url><loc>https://airplay-jet.vercel.app/routes/tpe-cph.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-cpt.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-crk.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-cts.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-ctu.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-dac.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-dad.html</loc><lastmod>2026-08-25</lastmod></url>
-  <url><loc>https://airplay-jet.vercel.app/routes/tpe-ded.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-del.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-dil.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-dmk.html</loc><lastmod>2026-08-25</lastmod></url>
@@ -80,17 +82,17 @@
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-jfk.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-jhb.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-jkt.html</loc><lastmod>2026-08-25</lastmod></url>
+  <url><loc>https://airplay-jet.vercel.app/routes/tpe-kbv.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-kch.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-kgd.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-khv.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-kij.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-kix.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-kja.html</loc><lastmod>2026-08-25</lastmod></url>
-  <url><loc>https://airplay-jet.vercel.app/routes/tpe-klo.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-kmg.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-kmq.html</loc><lastmod>2026-08-25</lastmod></url>
+  <url><loc>https://airplay-jet.vercel.app/routes/tpe-krr.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-ktm.html</loc><lastmod>2026-08-25</lastmod></url>
-  <url><loc>https://airplay-jet.vercel.app/routes/tpe-kuf.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-kul.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-kwi.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-kwl.html</loc><lastmod>2026-08-25</lastmod></url>
@@ -127,7 +129,6 @@
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-ngo.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-nha.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-nkg.html</loc><lastmod>2026-08-25</lastmod></url>
-  <url><loc>https://airplay-jet.vercel.app/routes/tpe-nng.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-nqz.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-nrt.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-nux.html</loc><lastmod>2026-08-25</lastmod></url>
@@ -150,11 +151,13 @@
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-pps.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-pqc.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-prg.html</loc><lastmod>2026-08-25</lastmod></url>
+  <url><loc>https://airplay-jet.vercel.app/routes/tpe-pty.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-pus.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-pvg.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-rmo.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-rmz.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-ror.html</loc><lastmod>2026-08-25</lastmod></url>
+  <url><loc>https://airplay-jet.vercel.app/routes/tpe-sai.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-sao.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-scl.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-sdj.html</loc><lastmod>2026-08-25</lastmod></url>
@@ -169,7 +172,6 @@
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-sia.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-sin.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-sjc.html</loc><lastmod>2026-08-25</lastmod></url>
-  <url><loc>https://airplay-jet.vercel.app/routes/tpe-sjd.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-smt.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-sof.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-son.html</loc><lastmod>2026-08-25</lastmod></url>
@@ -177,6 +179,7 @@
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-ssh.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-sub.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-svx.html</loc><lastmod>2026-08-25</lastmod></url>
+  <url><loc>https://airplay-jet.vercel.app/routes/tpe-swf.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-syd.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-syx.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-szx.html</loc><lastmod>2026-08-25</lastmod></url>
@@ -184,7 +187,7 @@
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-tao.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-tas.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-tbs.html</loc><lastmod>2026-08-25</lastmod></url>
-  <url><loc>https://airplay-jet.vercel.app/routes/tpe-tij.html</loc><lastmod>2026-08-25</lastmod></url>
+  <url><loc>https://airplay-jet.vercel.app/routes/tpe-thd.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-tiv.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-tjm.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-tkk.html</loc><lastmod>2026-08-25</lastmod></url>
@@ -199,7 +202,6 @@
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-urc.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-usm.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-utp.html</loc><lastmod>2026-08-25</lastmod></url>
-  <url><loc>https://airplay-jet.vercel.app/routes/tpe-vca.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-vie.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-vli.html</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://airplay-jet.vercel.app/routes/tpe-vno.html</loc><lastmod>2026-08-25</lastmod></url>
